@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Sub2API 主服务
+  sub2api:
+    image: ghcr.io/sub2api/sub2api:latest
+    container_name: sub2api
+    restart: unless-stopped
+    expose:
+      - "8080"      # API 端口
+      - "3030"      # 管理后台
+    volumes:
+      - ./config.cloudflare.yaml:/app/config.yaml:ro
+    environment:
+      - TZ=Asia/Shanghai
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - sub2api-net
+    ulimits:
+      nofile:
+        soft: 100000
+        hard: 100000
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Cloudflare Tunnel (直接用 docker network 连接)
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-tunnel
+    restart: unless-stopped
+    command: tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - sub2api-net
+    depends_on:
+      - sub2api
+
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:16-alpine
+    container_name: sub2api-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sub2api
+      POSTGRES_USER: sub2api
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - sub2api-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sub2api"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - "postgres"
+      - "-cshared_buffers=256MB"
+      - "-ceffective_cache_size=1GB"
+      - "-cmax_connections=100"
+      - "-cwork_mem=16MB"
+      - "-cmaintenance_work_mem=128MB"
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: sub2api-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --save "" --appendonly no
+    volumes:
+      - redis-data:/data
+    networks:
+      - sub2api-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  sub2api-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:

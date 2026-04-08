@@ -17,3 +17,6 @@ redis_data/
 # Temporary files
 *.tmp
 *.log
+
+# Browser automation sessions
+.playwright-mcp/
