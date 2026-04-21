@@ -158,10 +158,7 @@ export async function getGroupApiKeys(
  */
 export interface GroupRateMultiplierEntry {
   user_id: number
-  user_name: string
   user_email: string
-  user_notes: string
-  user_status: string
   rate_multiplier: number
 }
 
@@ -191,61 +188,6 @@ export async function updateSortOrder(
   return data
 }
 
-/**
- * Clear all rate multipliers for a group
- * @param id - Group ID
- * @returns Success confirmation
- */
-export async function clearGroupRateMultipliers(id: number): Promise<{ message: string }> {
-  const { data } = await apiClient.delete<{ message: string }>(`/admin/groups/${id}/rate-multipliers`)
-  return data
-}
-
-/**
- * Batch set rate multipliers for users in a group
- * @param id - Group ID
- * @param entries - Array of { user_id, rate_multiplier }
- * @returns Success confirmation
- */
-export async function batchSetGroupRateMultipliers(
-  id: number,
-  entries: Array<{ user_id: number; rate_multiplier: number }>
-): Promise<{ message: string }> {
-  const { data } = await apiClient.put<{ message: string }>(
-    `/admin/groups/${id}/rate-multipliers`,
-    { entries }
-  )
-  return data
-}
-
-/**
- * Get usage summary (today + cumulative cost) for all groups
- * @param timezone - IANA timezone string (e.g. "Asia/Shanghai")
- * @returns Array of group usage summaries
- */
-export async function getUsageSummary(
-  timezone?: string
-): Promise<{ group_id: number; today_cost: number; total_cost: number }[]> {
-  const { data } = await apiClient.get<
-    { group_id: number; today_cost: number; total_cost: number }[]
-  >('/admin/groups/usage-summary', {
-    params: timezone ? { timezone } : undefined
-  })
-  return data
-}
-
-/**
- * Get capacity summary (concurrency/sessions/RPM) for all active groups
- */
-export async function getCapacitySummary(): Promise<
-  { group_id: number; concurrency_used: number; concurrency_max: number; sessions_used: number; sessions_max: number; rpm_used: number; rpm_max: number }[]
-> {
-  const { data } = await apiClient.get<
-    { group_id: number; concurrency_used: number; concurrency_max: number; sessions_used: number; sessions_max: number; rpm_used: number; rpm_max: number }[]
-  >('/admin/groups/capacity-summary')
-  return data
-}
-
 export const groupsAPI = {
   list,
   getAll,
@@ -258,11 +200,7 @@ export const groupsAPI = {
   getStats,
   getGroupApiKeys,
   getGroupRateMultipliers,
-  clearGroupRateMultipliers,
-  batchSetGroupRateMultipliers,
-  updateSortOrder,
-  getUsageSummary,
-  getCapacitySummary
+  updateSortOrder
 }
 
 export default groupsAPI

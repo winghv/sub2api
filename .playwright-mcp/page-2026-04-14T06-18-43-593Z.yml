@@ -1,0 +1,411 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: 
+      - text: 目录
+    - link "1. 购买渠道" [ref=e6] [cursor=pointer]:
+      - /url: "#buy"
+    - link "2. 重要说明" [ref=e7] [cursor=pointer]:
+      - /url: "#important"
+    - link "4. 常遇问题" [ref=e8] [cursor=pointer]:
+      - /url: "#faq"
+    - link "5. 安装教程" [ref=e9] [cursor=pointer]:
+      - /url: "#install"
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - heading "🔥 Claude + Codex + Gemini + OpenClaw" [level=1] [ref=e12]
+      - paragraph [ref=e13]: 支持 Claude Code、Codex、Gemini CLI、OpenClaw 国内直连与配置，官方原版体验
+    - generic [ref=e14]:
+      - heading "🛒 购买渠道 & 售后服务" [level=2] [ref=e15]
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - heading "一号店铺" [level=4] [ref=e19]
+          - img "一号店铺" [ref=e21] [cursor=pointer]
+          - button "复制地址" [ref=e23] [cursor=pointer]
+        - generic [ref=e24]:
+          - heading "二号店铺" [level=4] [ref=e26]
+          - img "三号店铺" [ref=e28] [cursor=pointer]
+          - button "复制地址" [ref=e30] [cursor=pointer]
+        - generic [ref=e31]:
+          - heading "三号店铺" [level=4] [ref=e33]
+          - img "四号店铺" [ref=e35] [cursor=pointer]
+          - button "复制地址" [ref=e37] [cursor=pointer]
+        - generic [ref=e38]:
+          - heading "售后服务" [level=4] [ref=e40]
+          - img "售后服务" [ref=e42] [cursor=pointer]
+          - paragraph [ref=e44]: 技术支持服务升级通知群
+        - generic [ref=e45]:
+          - heading "售后群2" [level=4] [ref=e47]
+          - img "售后群2" [ref=e49] [cursor=pointer]
+          - paragraph [ref=e51]: 技术支持服务升级通知群2
+    - generic [ref=e52]:
+      - heading "为什么选我？" [level=3] [ref=e53]
+      - generic [ref=e54]:
+        - generic [ref=e55]: ✅ 双平台 - 一站搞定两大 AI 编程神器
+        - generic [ref=e56]: ✅ 稳定 - 告别 500/422/402，专线直连
+        - generic [ref=e57]: ✅ 低价 - 同等服务价格最优
+        - generic [ref=e58]: ✅ 无限制 - 不限 key、设备
+        - generic [ref=e59]: ✅ 售后好 - 服务原因不可用按量退
+    - generic [ref=e60]:
+      - heading "🚨 重要说明" [level=2] [ref=e61]
+      - paragraph [ref=e63]: Claude Code / Gemini CLI 都有一定上手门槛。我只负责你在官方客户端能用上，第三方包装客户端什么的需要自行研究。
+    - generic [ref=e64]:
+      - heading "🤔 常遇问题" [level=2] [ref=e65]
+      - generic [ref=e66]:
+        - generic [ref=e67]: 重点提示
+        - heading "Codex 日卡周卡月卡看这里" [level=3] [ref=e68]
+        - paragraph [ref=e69]:
+          - text: 官网兑换地址：
+          - link "https://cc.sub.258000.sbs/" [ref=e70] [cursor=pointer]:
+            - /url: https://cc.sub.258000.sbs/
+        - generic [ref=e71]:
+          - heading "兑换码使用教程（重要）" [level=4] [ref=e72]
+          - list [ref=e73]:
+            - listitem [ref=e74]: 进入网站创建账号并完成基础信息填写。
+            - listitem [ref=e75]: 使用兑换码完成核销（可在左侧“兑换”菜单操作）。
+            - listitem [ref=e76]: 创建秘钥（名称可自定义，分组选择每天50或者每天100刀分组，其他分组不能用）。
+            - listitem [ref=e77]: 使用记录查询（左侧“使用记录”查看明细，右上角可看每日消耗）。
+        - paragraph [ref=e78]:
+          - text: 当前生成密钥可以在
+          - code [ref=e79]: claudecode
+          - text: 中使用，
+          - code [ref=e80]: claudecode
+          - text: 只需要配置请求地址和密钥，模型名不要动，后台会自动映射到
+          - code [ref=e81]: gpt-5.4
+          - text: 模型。也可以在
+          - code [ref=e82]: opencode
+          - text: 、
+          - code [ref=e83]: codex
+          - text: 、
+          - code [ref=e84]: openclaw
+          - text: 中进行使用，具体教程请看下面的教程。
+    - generic [ref=e85]:
+      - heading "5. 安装与使用教程" [level=2] [ref=e86]
+      - generic [ref=e87]:
+        - button "Claude Code" [ref=e88] [cursor=pointer]
+        - button "Codex" [ref=e89] [cursor=pointer]
+        - button "Gemini" [ref=e90] [cursor=pointer]
+        - button "CC-Switch" [ref=e91] [cursor=pointer]
+        - button "Opencode" [ref=e92] [cursor=pointer]
+        - button "OpenClaw" [ref=e93] [cursor=pointer]
+        - button "VSCode & Cursor" [ref=e94] [cursor=pointer]
+        - button "状态栏插件" [ref=e95] [cursor=pointer]
+        - button "MCP 服务器" [ref=e96] [cursor=pointer]
+      - generic [ref=e97]:
+        - button " Windows" [ref=e98] [cursor=pointer]:
+          - generic [ref=e99]: 
+          - text: Windows
+        - button " macOS" [ref=e100] [cursor=pointer]:
+          - generic [ref=e101]: 
+          - text: macOS
+        - button " Linux" [ref=e102] [cursor=pointer]:
+          - generic [ref=e103]: 
+          - text: Linux
+      - generic [ref=e104]:
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - heading "💡 推荐使用 WSL 或 Git Bash" [level=3] [ref=e107]
+            - paragraph [ref=e108]: Claude Code 在 Windows 请使用 WSL 去安装操作使用，问题会少不少。再不济也要用 Git Bash 去调用 Claude Code。兼容最差的就是 PowerShell，经常文件锁定写入不了（error write file）。遇到问题多问 AI！
+          - generic [ref=e109]:
+            - heading "💡 推荐使用 Windows Terminal" [level=3] [ref=e110]
+            - paragraph [ref=e111]: 强烈建议使用 Windows Terminal，支持多标签、emoji 和中文显示。CMD 是上古遗物，用它必出问题！
+            - generic [ref=e112]:
+              - link "GitHub" [ref=e113] [cursor=pointer]:
+                - /url: https://github.com/microsoft/terminal
+              - link "下载" [ref=e114] [cursor=pointer]:
+                - /url: https://github.com/microsoft/terminal/releases
+            - img "Windows Terminal Preview" [ref=e116]
+          - generic [ref=e117]:
+            - heading "0 ⚠️ 前置要求：安装 Git" [level=3] [ref=e118]
+            - paragraph [ref=e119]: Claude Code 需要 Git 才能运行。如果启动时遇到以下错误：
+            - code [ref=e122]: "Claude Code on Windows requires git-bash (https://git-scm.com/downloads/win). If installed but not in PATH, set environment variable pointing to your bash.exe, similar to: CLAUDE_CODE_GIT_BASH_PATH=C:\\Program Files\\Git\\bin\\bash.exe"
+            - paragraph [ref=e123]: 请先安装 Git：
+            - generic [ref=e124]:
+              - link "官方下载" [ref=e125] [cursor=pointer]:
+                - /url: https://git-scm.com/downloads/win
+              - link "国内加速下载" [ref=e126] [cursor=pointer]:
+                - /url: https://static.yoouu.cn/Git-2.52.0-64-bit.exe
+            - generic [ref=e127]:
+              - paragraph [ref=e128]: ⚠️ 必须用 PowerShell 或 Windows Terminal！
+              - button "▶ 如果已安装但不在 PATH 中，设置环境变量（路径改为你实际的 Git 安装路径）：" [ref=e129] [cursor=pointer]
+              - generic [ref=e131]:
+                - generic [ref=e132]:
+                  - generic [ref=e133]: PowerShell
+                  - button "复制" [ref=e134] [cursor=pointer]
+                - code [ref=e136]: CLAUDE_CODE_GIT_BASH_PATH=C:\Program Files\Git\bin\bash.exe
+            - heading "验证安装" [level=4] [ref=e137]
+            - paragraph [ref=e138]: ⚠️ 必须用 PowerShell 或 Windows Terminal！
+            - generic [ref=e139]:
+              - generic [ref=e140]:
+                - generic [ref=e141]: PowerShell
+                - button "复制" [ref=e142] [cursor=pointer]
+              - code [ref=e144]: git --version
+          - heading "⭐ 原生安装（推荐）" [level=3] [ref=e145]
+          - generic [ref=e146]:
+            - text: ⚠️
+            - strong [ref=e147]: 必须用 PowerShell 或 Windows Terminal！
+            - text: cmd 是上古遗物，用它必出问题！
+            - text: 按
+            - code [ref=e148]: Win+X
+            - text: → 选择「终端」或「PowerShell」
+          - list [ref=e149]:
+            - listitem [ref=e150]: ✓ ✅ 无需 Node.js，自动后台更新，官方推荐
+            - listitem [ref=e151]: ✓ ✅ 自动后台更新，始终保持最新版本
+            - listitem [ref=e152]: ✓ ✅ 避免 npm 权限问题
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - generic [ref=e155]: PowerShell (管理员)
+              - button "复制" [ref=e156] [cursor=pointer]
+            - code [ref=e158]: irm https://claude.ai/install.ps1 | iex
+          - generic [ref=e159]:
+            - button "▶ WinGet 安装（Windows）" [ref=e160] [cursor=pointer]
+            - generic [ref=e161]:
+              - paragraph [ref=e162]: 如果你更习惯使用 WinGet 包管理器：
+              - generic [ref=e163]:
+                - generic [ref=e164]:
+                  - generic [ref=e165]: PowerShell
+                  - button "复制" [ref=e166] [cursor=pointer]
+                - code [ref=e168]: winget install Anthropic.ClaudeCode
+              - paragraph [ref=e169]: 更新到最新版本：
+              - generic [ref=e170]:
+                - generic [ref=e171]:
+                  - generic [ref=e172]: PowerShell
+                  - button "复制" [ref=e173] [cursor=pointer]
+                - code [ref=e175]: winget upgrade Anthropic.ClaudeCode
+          - generic [ref=e176]:
+            - button "▶  中国大陆用户提示" [ref=e177] [cursor=pointer]
+            - generic [ref=e178]:
+              - paragraph [ref=e179]: 由于网络环境原因，直连 Anthropic API 可能会失败或超时。
+              - paragraph [ref=e180]:
+                - strong [ref=e181]: 解决方案：
+              - list [ref=e182]:
+                - listitem [ref=e183]:
+                  - text: 推荐配置下方的
+                  - strong [ref=e184]: 环境变量
+                  - text: 使用中转服务（稳定、高速）。
+                - listitem [ref=e185]: 或者确保你的终端走了系统代理（科学上网）。
+          - generic [ref=e186]:
+            - button "▶ npm 安装（需要 Node.js 18+，适合有网络限制需要使用国内镜像的用户）" [ref=e187] [cursor=pointer]
+            - generic [ref=e188]:
+              - generic [ref=e189]:
+                - text: ⚠️
+                - strong [ref=e190]: 官方推荐原生安装方式！
+                - text: npm 安装已被标记为弃用，但对于网络受限需要使用国内镜像的用户仍可使用。
+              - heading "第一步：安装 Node.js 18+" [level=4] [ref=e191]
+              - paragraph [ref=e192]: Claude Code 需要 Node.js 18 或更高版本。选择以下任一方式安装：
+              - generic [ref=e193]:
+                - button "▶ 方式一：官网下载（最简单）" [ref=e194] [cursor=pointer]
+                - generic [ref=e195]:
+                  - paragraph [ref=e196]:
+                    - text: 访问
+                    - link "Node.js 官网" [ref=e197] [cursor=pointer]:
+                      - /url: https://nodejs.org/zh-cn
+                    - text: ，下载 LTS（长期支持）版本并安装。
+                  - paragraph [ref=e198]: 安装完成后，验证安装：
+                  - generic [ref=e199]:
+                    - text: ⚠️
+                    - strong [ref=e200]: 必须用 PowerShell 或 Windows Terminal！
+                    - text: cmd 是上古遗物，用它必出问题！
+                    - text: 按
+                    - code [ref=e201]: Win+X
+                    - text: → 选择「终端」或「PowerShell」
+                  - generic [ref=e202]:
+                    - generic [ref=e203]:
+                      - generic [ref=e204]: PowerShell
+                      - button "复制" [ref=e205] [cursor=pointer]
+                    - code [ref=e207]: node --version npm --version
+              - generic [ref=e208]:
+                - button "▶ 方式二：使用 nvm-windows（推荐，方便管理多版本）" [ref=e209] [cursor=pointer]
+                - generic [ref=e210]:
+                  - paragraph [ref=e211]: nvm-windows 可以方便地安装和切换不同版本的 Node.js：
+                  - list [ref=e212]:
+                    - listitem [ref=e213]:
+                      - text: 访问
+                      - link "nvm-windows Releases" [ref=e214] [cursor=pointer]:
+                        - /url: https://github.com/coreybutler/nvm-windows/releases
+                    - listitem [ref=e215]:
+                      - text: 下载最新版的
+                      - code [ref=e216]: nvm-setup.exe
+                      - text: 并安装
+                    - listitem [ref=e217]: 安装完成后，打开新的 PowerShell 窗口执行：
+                  - generic [ref=e218]:
+                    - text: ⚠️
+                    - strong [ref=e219]: 必须用 PowerShell 或 Windows Terminal！
+                    - text: cmd 是上古遗物，用它必出问题！
+                    - text: 按
+                    - code [ref=e220]: Win+X
+                    - text: → 选择「终端」或「PowerShell」
+                  - generic [ref=e221]:
+                    - generic [ref=e222]:
+                      - generic [ref=e223]: PowerShell
+                      - button "复制" [ref=e224] [cursor=pointer]
+                    - code [ref=e226]: "# 查看可用版本 nvm list available # 安装最新 LTS 版本 nvm install lts # 使用该版本 nvm use lts # 验证安装 node --version"
+              - generic [ref=e227]:
+                - button "▶ 方式三：使用包管理器（Chocolatey / Scoop）" [ref=e228] [cursor=pointer]
+                - generic [ref=e229]:
+                  - paragraph [ref=e230]:
+                    - strong [ref=e231]: 使用 Chocolatey：
+                  - generic [ref=e232]:
+                    - text: ⚠️
+                    - strong [ref=e233]: 必须用管理员权限的 PowerShell！
+                    - text: 右键开始菜单 → 选择「终端（管理员）」或「PowerShell（管理员）」
+                  - generic [ref=e234]:
+                    - generic [ref=e235]:
+                      - generic [ref=e236]: PowerShell (管理员)
+                      - button "复制" [ref=e237] [cursor=pointer]
+                    - code [ref=e239]: choco install nodejs-lts
+                  - paragraph [ref=e240]:
+                    - strong [ref=e241]: 使用 Scoop：
+                  - generic [ref=e242]:
+                    - text: ⚠️
+                    - strong [ref=e243]: 必须用 PowerShell 或 Windows Terminal！
+                    - text: cmd 是上古遗物，用它必出问题！
+                    - text: 按
+                    - code [ref=e244]: Win+X
+                    - text: → 选择「终端」或「PowerShell」
+                  - generic [ref=e245]:
+                    - generic [ref=e246]:
+                      - generic [ref=e247]: PowerShell
+                      - button "复制" [ref=e248] [cursor=pointer]
+                    - code [ref=e250]: scoop install nodejs-lts
+                  - paragraph [ref=e251]:
+                    - strong [ref=e252]: 验证安装：
+                  - generic [ref=e253]:
+                    - generic [ref=e254]:
+                      - generic [ref=e255]: PowerShell
+                      - button "复制" [ref=e256] [cursor=pointer]
+                    - code [ref=e258]: node --version npm --version
+              - heading "第二步：使用 npm 全局安装 Claude Code" [level=4] [ref=e259]
+              - generic [ref=e260]:
+                - text: ⚠️
+                - strong [ref=e261]: 必须用 PowerShell 或 Windows Terminal！
+                - text: cmd 是上古遗物，用它必出问题！
+                - text: 按
+                - code [ref=e262]: Win+X
+                - text: → 选择「终端」或「PowerShell」
+              - generic [ref=e263]:
+                - generic [ref=e264]:
+                  - generic [ref=e265]: PowerShell
+                  - button "复制" [ref=e266] [cursor=pointer]
+                - code [ref=e268]: "# 直接安装（需要能访问 npm 官方源） npm install -g @anthropic-ai/claude-code # 如果网络不好，可以使用国内镜像 npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com"
+              - paragraph [ref=e269]:
+                - text: 💡 提示：使用
+                - code [ref=e270]: "--registry"
+                - text: 参数可以临时指定国内镜像源，解决网络问题。
+          - generic [ref=e271]:
+            - button "▶  从 npm 迁移到原生安装" [ref=e272] [cursor=pointer]
+            - generic [ref=e273]:
+              - paragraph [ref=e274]: 如果你之前用 npm 安装过，建议迁移到原生版本：
+              - generic [ref=e275]:
+                - generic [ref=e276]:
+                  - generic [ref=e277]: PowerShell
+                  - button "复制" [ref=e278] [cursor=pointer]
+                - code [ref=e280]: "# 1. 卸载 npm 版本 npm uninstall -g @anthropic-ai/claude-code # 2. 执行原生安装 irm https://claude.ai/install.ps1 | iex"
+          - generic [ref=e281]:
+            - button "▶  安装特定版本" [ref=e282] [cursor=pointer]
+            - generic [ref=e283]:
+              - paragraph [ref=e284]: 如果需要安装特定版本（仅限 npm 方式）：
+              - generic [ref=e285]:
+                - generic [ref=e286]:
+                  - generic [ref=e287]: PowerShell
+                  - button "复制" [ref=e288] [cursor=pointer]
+                - code [ref=e290]: npm install -g @anthropic-ai/claude-code@0.2.9
+              - paragraph [ref=e291]: 将 0.2.9 替换为你需要的版本号。
+          - heading "验证安装" [level=3] [ref=e292]
+          - generic [ref=e293]:
+            - generic [ref=e294]:
+              - generic [ref=e295]: PowerShell
+              - button "复制" [ref=e296] [cursor=pointer]
+            - code [ref=e298]: claude --version
+          - paragraph [ref=e299]: 显示版本号说明安装成功！
+          - generic [ref=e300]:
+            - paragraph [ref=e301]:
+              - strong [ref=e302]: ❓ 提示 .local\bin 不在 PATH 中？
+            - paragraph [ref=e303]: 原生安装后如果提示路径不在 PATH 中，执行以下命令添加：
+          - paragraph [ref=e304]:
+            - strong [ref=e305]: 系统级别（需管理员权限）：
+          - generic [ref=e306]:
+            - text: ⚠️ 按
+            - code [ref=e307]: Win+X
+            - text: → 选择「终端(管理员)」或「PowerShell(管理员)」
+          - generic [ref=e308]:
+            - button "▶ 点击查看添加 PATH 的命令" [ref=e309] [cursor=pointer]
+            - generic [ref=e310]:
+              - paragraph [ref=e311]:
+                - strong [ref=e312]: 系统级别：
+              - generic [ref=e313]:
+                - generic [ref=e314]:
+                  - generic [ref=e315]: PowerShell (管理员)粘贴直接执行
+                  - button "复制" [ref=e316] [cursor=pointer]
+                - code [ref=e318]: "$p=\"$env:USERPROFILE\\.local\\bin\"; if([Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") -notlike \"*$p*\"){[Environment]::SetEnvironmentVariable(\"Path\",[Environment]::GetEnvironmentVariable(\"Path\",\"Machine\")+\";$p\",\"Machine\"); \"已添加 - 请重启终端生效\"}else{\"已存在，无需操作\"}"
+              - paragraph [ref=e319]: 用户级别：(群主不推荐 别问 按我说的做)
+              - generic [ref=e320]:
+                - generic [ref=e321]:
+                  - generic [ref=e322]: PowerShell
+                  - button "复制" [ref=e323] [cursor=pointer]
+                - code [ref=e325]: "$p=\"$env:USERPROFILE\\.local\\bin\"; if([Environment]::GetEnvironmentVariable(\"Path\",\"User\") -notlike \"*$p*\"){[Environment]::SetEnvironmentVariable(\"Path\",[Environment]::GetEnvironmentVariable(\"Path\",\"User\")+\";$p\",\"User\"); \"已添加 - 请重启终端生效\"}else{\"已存在，无需操作\"}"
+          - heading "设置环境变量" [level=3] [ref=e326]
+          - paragraph [ref=e327]: 配置连接到中转服务。
+          - generic [ref=e328]:
+            - button "▶ ⚠️ 之前用过其他中转服务？点击检查并清理旧配置" [ref=e329] [cursor=pointer]
+            - generic [ref=e330]:
+              - paragraph [ref=e331]:
+                - text: 如果之前设置过
+                - code [ref=e332]: ANTHROPIC_BASE_URL
+                - text: 或
+                - code [ref=e333]: ANTHROPIC_API_KEY
+                - text: ，请先清除，否则可能冲突。
+              - generic [ref=e334]:
+                - generic [ref=e335]:
+                  - generic [ref=e336]: PowerShell (管理员)
+                  - button "复制" [ref=e337] [cursor=pointer]
+                - code [ref=e339]: "# 检查现有变量 Get-ChildItem Env:ANTHROPIC_* # 删除冲突变量 (根据实际显示结果修改) [System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_API_KEY\", $null, [System.EnvironmentVariableTarget]::User) [System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_API_KEY\", $null, [System.EnvironmentVariableTarget]::Machine)"
+          - heading "永久设置" [level=4] [ref=e340]
+          - paragraph [ref=e341]: 系统级别（需管理员权限）：
+          - paragraph [ref=e342]: ⚠️ 需管理员权限打开 PowerShell
+          - generic [ref=e343]:
+            - generic [ref=e344]:
+              - generic [ref=e345]: PowerShell (管理员)
+              - button "复制" [ref=e346] [cursor=pointer]
+            - code [ref=e348]: "[System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_BASE_URL\", \"https://cc.sub.258000.sbs\", [System.EnvironmentVariableTarget]::Machine) [System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_AUTH_TOKEN\", \"sk_xxxxxxxxx\", [System.EnvironmentVariableTarget]::Machine) [System.Environment]::SetEnvironmentVariable(\"API_TIMEOUT_MS\", \"3000000\", [System.EnvironmentVariableTarget]::Machine) [System.Environment]::SetEnvironmentVariable(\"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC\", \"1\", [System.EnvironmentVariableTarget]::Machine)"
+          - paragraph [ref=e349]: 用户级别：(群主不推荐 别问 按我说的做)
+          - generic [ref=e350]:
+            - generic [ref=e351]:
+              - generic [ref=e352]: PowerShell
+              - button "复制" [ref=e353] [cursor=pointer]
+            - code [ref=e355]: "[System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_BASE_URL\", \"https://cc.sub.258000.sbs\", [System.EnvironmentVariableTarget]::User) [System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_AUTH_TOKEN\", \"sk_xxxxxxxxx\", [System.EnvironmentVariableTarget]::User) [System.Environment]::SetEnvironmentVariable(\"API_TIMEOUT_MS\", \"3000000\", [System.EnvironmentVariableTarget]::User) [System.Environment]::SetEnvironmentVariable(\"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC\", \"1\", [System.EnvironmentVariableTarget]::User)"
+          - paragraph [ref=e356]: 临时设置 (群主不推荐 别问 按我说的做)：
+          - generic [ref=e357]:
+            - generic [ref=e358]:
+              - generic [ref=e359]: PowerShell
+              - button "复制" [ref=e360] [cursor=pointer]
+            - code [ref=e362]: $env:ANTHROPIC_BASE_URL = "https://cc.sub.258000.sbs" $env:ANTHROPIC_AUTH_TOKEN = "sk_xxxxxxxxx" $env:API_TIMEOUT_MS = "3000000" $env:CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1"
+          - paragraph [ref=e363]: 💡 临时设置只在当前窗口有效，关闭即失效。
+          - generic [ref=e364]:
+            - text: 💡
+            - strong [ref=e365]: sk_xxxxxxxxx
+            - text: 请替换为官网api密钥中所申请的密钥！
+          - heading "验证环境变量" [level=3] [ref=e366]
+          - paragraph [ref=e367]: 设置完成后，重新打开终端并执行以下命令检查：
+          - generic [ref=e368]:
+            - generic [ref=e369]:
+              - generic [ref=e370]: PowerShell
+              - button "复制" [ref=e371] [cursor=pointer]
+            - code [ref=e373]: Get-ChildItem Env:ANTHROPIC_*
+          - generic [ref=e374]:
+            - button "▶ 🗑️ 不再使用？删除环境变量" [ref=e375] [cursor=pointer]
+            - generic [ref=e376]:
+              - paragraph [ref=e377]: 如果不再使用本服务，可以删除相关环境变量：
+              - generic [ref=e378]:
+                - generic [ref=e379]:
+                  - generic [ref=e380]: PowerShell (管理员)
+                  - button "复制" [ref=e381] [cursor=pointer]
+                - code [ref=e383]: "[System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_BASE_URL\", $null, [System.EnvironmentVariableTarget]::Machine) [System.Environment]::SetEnvironmentVariable(\"ANTHROPIC_AUTH_TOKEN\", $null, [System.EnvironmentVariableTarget]::Machine) [System.Environment]::SetEnvironmentVariable(\"API_TIMEOUT_MS\", $null, [System.EnvironmentVariableTarget]::Machine) [System.Environment]::SetEnvironmentVariable(\"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC\", $null, [System.EnvironmentVariableTarget]::Machine)"
+          - heading "开始使用" [level=3] [ref=e384]
+          - generic [ref=e385]:
+            - generic [ref=e386]:
+              - generic [ref=e387]: PowerShell
+              - button "复制" [ref=e388] [cursor=pointer]
+            - code [ref=e390]: "# 进入项目目录 cd C:\\path\\to\\your\\project # 启动 claude"
+        - text: ✓ ✓ ✓ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ✓ ✓ ✓ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶
+      - text: ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ✓ ✓ ✓ ✓ ▶ ▶ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ▶ ▶ ✓ ✓ ✓ ✓ ▶ ▶ ✓ ✓ ✓ ✓ ▶ ▶
