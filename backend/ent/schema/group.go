@@ -126,6 +126,10 @@ func (Group) Fields() []ent.Field {
 			Default(true).
 			Comment("是否注入 MCP XML 调用协议提示词（仅 antigravity 平台）"),
 
+		field.Bool("simulate_claude_max_enabled").
+			Default(false).
+			Comment("simulate claude usage as claude-max style (1h cache write)"),
+
 		// 支持的模型系列 (added by migration 046)
 		field.JSON("supported_model_scopes", []string{}).
 			Default([]string{"claude", "gemini_text", "gemini_image"}).

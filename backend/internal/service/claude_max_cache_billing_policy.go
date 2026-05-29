@@ -9,6 +9,12 @@ import (
 	"github.com/tidwall/gjson"
 )
 
+const (
+	claudeMaxMessageOverheadTokens = 3
+	claudeMaxBlockOverheadTokens   = 1
+	claudeMaxUnknownContentTokens  = 4
+)
+
 type claudeMaxCacheBillingOutcome struct {
 	Simulated bool
 }
