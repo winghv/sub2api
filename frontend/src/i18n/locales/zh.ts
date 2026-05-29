@@ -1,6 +1,101 @@
 export default {
   // Home Page
   home: {
+    cyber: {
+      brandMode: 'API GATEWAY',
+      eyebrow: 'AI API GATEWAY / OPENAI + ANTHROPIC',
+      subtitle: '助力碳基进化',
+      description: 'Superwhv 是面向开发者和团队的 AI API Gateway。用一个控制台统一接入 OpenAI、Anthropic、Claude、GPT，完成密钥、路由、额度和请求观测。',
+      visualLabel: 'Superwhv AI API Gateway 路由演示',
+      networkTitle: 'GATEWAY ROUTE MAP',
+      statusOnline: 'ONLINE',
+      terminalTitle: 'gateway.trace',
+      terminalLines: {
+        chat: 'POST /v1/chat/completions',
+        messages: 'POST /v1/messages',
+        route: 'route model: gpt / claude',
+        quota: 'quota guard: key + team',
+        ready: 'stream ready · usage observed'
+      },
+      signals: {
+        gateway: 'PROTOCOLS',
+        gatewayValue: 'OpenAI / Anthropic',
+        models: 'MODELS',
+        modelsValue: 'GPT / Claude',
+        billing: 'CONTROL',
+        billingValue: '额度 / 日志 / 成本'
+      },
+      capabilities: {
+        eyebrow: 'PROTOCOL LAYER',
+        title: '统一协议能力',
+        description: '把不同模型和调用形态收敛到一个稳定入口，减少客户端迁移和多平台维护。',
+        items: {
+          openai: {
+            title: 'OpenAI 兼容接口',
+            description: '保留熟悉的 Chat Completions 调用方式，现有工具可以更快接入。'
+          },
+          anthropic: {
+            title: 'Anthropic Messages 兼容',
+            description: '支持 Claude Messages 调用形态，让 Anthropic 生态工具保持原有体验。'
+          },
+          routing: {
+            title: '多模型统一路由',
+            description: '在 GPT 与 Claude 模型族之间统一调度，按能力和状态分配请求。'
+          }
+        }
+      },
+      advantages: {
+        eyebrow: 'WHY SUPERWHV',
+        title: '为什么选择 Superwhv',
+        description: '把协议兼容、模型调度、成本控制和可观测性合在同一个控制台。',
+        items: {
+          protocol: {
+            title: '双协议兼容',
+            description: '同时支持 OpenAI 与 Anthropic 调用形态，现有工具迁移成本更低。'
+          },
+          routing: {
+            title: '模型灵活切换',
+            description: '在 GPT 与 Claude 模型族之间统一路由，减少多平台维护。'
+          },
+          cost: {
+            title: '额度与成本可控',
+            description: '按密钥和团队查看用量，配额、消费、请求状态集中管理。'
+          },
+          observability: {
+            title: '请求可观测',
+            description: '集中查看请求状态、消费统计和调用日志，排查问题不再分散到多个平台。'
+          }
+        }
+      },
+      workflow: {
+        eyebrow: 'WORKFLOW',
+        title: '从密钥到观测的一条路径',
+        description: '把开发接入和团队管理拆成清晰步骤，适合日常重复操作。',
+        steps: {
+          key: {
+            title: '创建 API Key',
+            description: '为应用、成员或项目生成独立密钥，便于权限和用量拆分。'
+          },
+          route: {
+            title: '选择协议与模型',
+            description: '按客户端使用 OpenAI 或 Anthropic 调用形态，并路由到可用模型。'
+          },
+          quota: {
+            title: '设置额度与成本边界',
+            description: '按密钥和团队控制额度，减少不可预期的消耗。'
+          },
+          observe: {
+            title: '查看请求与消费',
+            description: '通过请求状态、日志和统计定位问题，持续优化路由策略。'
+          }
+        }
+      },
+      finalCta: {
+        eyebrow: 'READY',
+        title: '开始统一管理 AI API',
+        description: '进入控制台创建密钥，或先查看文档确认接入方式。'
+      }
+    },
     viewOnGithub: '在 GitHub 上查看',
     viewDocs: '查看文档',
     docs: '文档',

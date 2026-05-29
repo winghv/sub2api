@@ -1,6 +1,101 @@
 export default {
   // Home Page
   home: {
+    cyber: {
+      brandMode: 'API GATEWAY',
+      eyebrow: 'AI API GATEWAY / OPENAI + ANTHROPIC',
+      subtitle: 'Empowering Carbon-Based Evolution',
+      description: 'Superwhv is an AI API Gateway for developers and teams. Use one console to connect OpenAI, Anthropic, Claude, and GPT while managing keys, routing, quotas, and request observability.',
+      visualLabel: 'Superwhv AI API Gateway routing demo',
+      networkTitle: 'GATEWAY ROUTE MAP',
+      statusOnline: 'ONLINE',
+      terminalTitle: 'gateway.trace',
+      terminalLines: {
+        chat: 'POST /v1/chat/completions',
+        messages: 'POST /v1/messages',
+        route: 'route model: gpt / claude',
+        quota: 'quota guard: key + team',
+        ready: 'stream ready · usage observed'
+      },
+      signals: {
+        gateway: 'PROTOCOLS',
+        gatewayValue: 'OpenAI / Anthropic',
+        models: 'MODELS',
+        modelsValue: 'GPT / Claude',
+        billing: 'CONTROL',
+        billingValue: 'Quota / logs / cost'
+      },
+      capabilities: {
+        eyebrow: 'PROTOCOL LAYER',
+        title: 'Unified Protocol Layer',
+        description: 'Bring different models and calling patterns behind one stable entry point, reducing client migration and platform maintenance.',
+        items: {
+          openai: {
+            title: 'OpenAI-compatible API',
+            description: 'Keep the familiar Chat Completions pattern so existing tools can connect faster.'
+          },
+          anthropic: {
+            title: 'Anthropic Messages compatible',
+            description: 'Support Claude Messages-style calls while keeping Anthropic ecosystem tooling intact.'
+          },
+          routing: {
+            title: 'Unified model routing',
+            description: 'Route GPT and Claude model families through one gateway based on capability and status.'
+          }
+        }
+      },
+      advantages: {
+        eyebrow: 'WHY SUPERWHV',
+        title: 'Why Superwhv',
+        description: 'Protocol compatibility, model routing, cost control, and observability in one console.',
+        items: {
+          protocol: {
+            title: 'Dual-protocol compatibility',
+            description: 'Support OpenAI and Anthropic calling patterns so existing tools migrate with less friction.'
+          },
+          routing: {
+            title: 'Flexible model routing',
+            description: 'Route GPT and Claude model families through one gateway instead of maintaining platforms one by one.'
+          },
+          cost: {
+            title: 'Quota and cost control',
+            description: 'Track usage by key and team, with quota, spending, and request status managed centrally.'
+          },
+          observability: {
+            title: 'Request observability',
+            description: 'Inspect request status, spending, and logs in one place instead of jumping across provider consoles.'
+          }
+        }
+      },
+      workflow: {
+        eyebrow: 'WORKFLOW',
+        title: 'One path from key to observability',
+        description: 'Keep developer integration and team operations clear enough for repeated daily use.',
+        steps: {
+          key: {
+            title: 'Create API keys',
+            description: 'Issue independent keys for apps, members, or projects so access and usage stay separated.'
+          },
+          route: {
+            title: 'Choose protocol and model',
+            description: 'Use OpenAI or Anthropic calling patterns and route traffic to available models.'
+          },
+          quota: {
+            title: 'Set quota and cost boundaries',
+            description: 'Control usage by key and team to avoid unexpected spend.'
+          },
+          observe: {
+            title: 'Inspect requests and spend',
+            description: 'Use status, logs, and statistics to debug issues and improve routing policy.'
+          }
+        }
+      },
+      finalCta: {
+        eyebrow: 'READY',
+        title: 'Start managing AI APIs in one place',
+        description: 'Open the console to create a key, or review the docs before connecting a client.'
+      }
+    },
     viewOnGithub: 'View on GitHub',
     viewDocs: 'View Documentation',
     docs: 'Docs',
