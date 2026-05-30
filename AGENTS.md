@@ -13,492 +13,143 @@
 
 | 分支 | 说明 |
 |------|------|
-| `main` | 我们的主分支，包含所有定制功能 |
-| `release/custom-X.Y.Z` | 基于官方 `vX.Y.Z` 的发布分支 |
-| `upstream/main` | 上游官方仓库 |
+| **`dev`** | **我们的主分支，包含所有定制功能**（210+ 定制提交） |
+| `main` | 仅作为 upstream 镜像快照，不含定制 |
+| `release/custom-X.Y.Z` | 基于 `dev` 的发布分支，打 tag 触发 CI 构建镜像 |
+| `upstream/main` | 上游官方仓库（Wei-Shaw/sub2api） |
 
 ---
 
-## 发布流程（基于新官方版本）
+## 发布流程（基于新官方版本 / 常规功能发布）
 
-当官方发布新版本（如 `v0.1.69`）时：
-
-### 1. 同步上游并创建发布分支
+### 1. 同步上游（如需）
 
 ```bash
-# 获取上游最新代码
+git checkout dev
 git fetch upstream --tags
-
-# 基于官方标签创建新的发布分支
-git checkout v0.1.69 -b release/custom-0.1.69
-
-# 合并我们的 main 分支（包含所有定制功能）
-git merge main --no-edit
-
-# 解决可能的冲突后继续
+git branch -f backup/dev-before-upstream-vXXX
+git merge upstream/main --no-edit
 ```
 
-### 2. 更新版本号并打标签
+### 2. 创建发布分支并打 tag 触发 CI
 
 ```bash
-# 更新版本号文件
-echo "0.1.69.1" > backend/cmd/server/VERSION
+git checkout dev
+git checkout -b release/custom-0.1.XXX
+git push -u origin release/custom-0.1.XXX
+
+echo "0.1.XXX.1" > backend/cmd/server/VERSION
 git add backend/cmd/server/VERSION
-git commit -m "chore: bump version to 0.1.69.1"
+git commit -m "chore: bump version to 0.1.XXX.1"
 
-# 打上我们自己的标签
-git tag v0.1.69.1
-
-# 推送分支和标签
-git push origin release/custom-0.1.69
-git push origin v0.1.69.1
+git tag -a v0.1.XXX.1 -m "v0.1.XXX.1: <描述>"
+git push origin v0.1.XXX.1
 ```
 
-### 3. 更新 main 分支
+### 3. 等待 CI 构建镜像
+
+推送 tag 后 GitHub Actions release.yml 自动触发生成镜像推送到 `ghcr.io/winghv/sub2api:{version}`。用 `gh run watch` 监控。
+
+### 4. 同步 release 到 dev
 
 ```bash
-# 将发布分支合并回 main，保持 main 包含最新定制功能
-git checkout main
-git merge release/custom-0.1.69
-git push origin main
+git checkout dev
+git merge release/custom-0.1.XXX
+git push origin dev
 ```
 
 ---
 
-## 热修复发布（在现有版本上修复）
-
-当需要在当前版本上发布修复时：
+## 热修复发布（在现有版本上紧急修复）
 
 ```bash
-# 在当前发布分支上修复
-git checkout release/custom-0.1.68
-# ... 进行修复 ...
-git commit -m "fix: 修复描述"
+# 1. 在 dev 上修复
+git checkout dev
+# ... 修复 ...
+git commit -m "fix: <描述>"
 
-# 递增小版本号
-echo "0.1.68.2" > backend/cmd/server/VERSION
+# 2. 递增版本号
+echo "0.1.XXX.2" > backend/cmd/server/VERSION
 git add backend/cmd/server/VERSION
-git commit -m "chore: bump version to 0.1.68.2"
+git commit -m "chore: bump version to 0.1.XXX.2"
 
-# 打标签并推送
-git tag v0.1.68.2
-git push origin release/custom-0.1.68
-git push origin v0.1.68.2
+# 3. 同步到 release 分支
+git checkout release/custom-0.1.XXX
+git merge dev --no-edit
 
-# 同步修复到 main
-git checkout main
-git cherry-pick <fix-commit-hash>
-git push origin main
+# 4. 打 tag 触发 CI
+git tag -a v0.1.XXX.2 -m "v0.1.XXX.2: hotfix — <描述>"
+git push origin dev release/custom-0.1.XXX v0.1.XXX.2
+```
+
+### 5. 服务器拉取新镜像并切换
+
+```bash
+ssh rn-4h-4g
+docker pull ghcr.io/winghv/sub2api:0.1.XXX.2
+
+cat > /opt/sub2api/deploy/docker-compose.override.yml <<'EOF'
+services:
+  sub2api:
+    image: ghcr.io/winghv/sub2api:0.1.XXX.2
+EOF
+
+cd /opt/sub2api/deploy
+docker compose up -d --force-recreate sub2api
 ```
 
 ---
 
-## 服务器部署流程
+## 服务器部署（详细说明）
 
-### 前置条件
+### 现网架构
 
-- 本地已配置 SSH 别名 `clicodeplus` 连接到生产服务器（运行服务）
-- 本地已配置 SSH 别名 `us-asaki-root` 连接到构建服务器（拉取代码、构建镜像）
-- 生产服务器部署目录：`/root/sub2api`（正式）、`/root/sub2api-beta`（测试）、`/root/sub2api-star`（Star）
-- 生产服务器使用 Docker Compose 部署
-- **镜像统一在构建服务器上构建**，避免生产服务器因编译占用 CPU/内存影响线上服务
-
-### 服务器角色说明
-
-| 服务器 | SSH 别名 | 职责 |
-|--------|----------|------|
-| 构建服务器 | `us-asaki-root` | 拉取代码、`docker build` 构建镜像 |
-| 生产服务器 | `clicodeplus` | 加载镜像、运行服务、部署验证 |
-| 数据库服务器 | `db-clicodeplus` | PostgreSQL 16 + Redis 7，所有环境共用 |
-
-> 数据库服务器运维手册：`db-clicodeplus:/root/README.md`
-
-### 部署环境说明
-
-| 环境 | 目录（生产服务器） | 端口 | 数据库 | Redis DB | 容器名 |
-|------|------|------|--------|----------|--------|
-| 正式 | `/root/sub2api` | 8080 | `sub2api` | 0 | `sub2api` |
-| Beta | `/root/sub2api-beta` | 8084 | `beta` | 2 | `sub2api-beta` |
-| OpenAI | `/root/sub2api-openai` | 8083 | `openai` | 3 | `sub2api-openai` |
-| Star | `/root/sub2api-star` | 8086 | `star` | 4 | `sub2api-star` |
-
-### 外部数据库与 Redis
-
-所有环境（正式、Beta、OpenAI、Star）共用 `db.clicodeplus.com` 上的 **PostgreSQL 16** 和 **Redis 7**，不使用容器内数据库或 Redis。
-
-**PostgreSQL**（端口 5432，TLS 加密，scram-sha-256 认证）：
-
-| 环境 | 用户名 | 数据库 |
-|------|--------|--------|
-| 正式 | `sub2api` | `sub2api` |
-| Beta | `beta` | `beta` |
-| OpenAI | `openai` | `openai` |
-| Star | `star` | `star` |
-
-**Redis**（端口 6379，密码认证）：
-
-| 环境 | DB |
+| 项目 | 值 |
 |------|-----|
-| 正式 | 0 |
-| Beta | 2 |
-| OpenAI | 3 |
-| Star | 4 |
+| **域名** | `api.superwhv.me`（Cloudflare Tunnel） |
+| **服务器** | RackNerd VPS，SSH `rn-4h-4g`，IP `107.175.221.3:2022` |
+| **部署目录** | `/opt/sub2api/deploy` |
+| **镜像来源** | `ghcr.io/winghv/sub2api:{version}`（CI 自动构建） |
+| **容器** | `sub2api` + `sub2api-postgres`（PG16）+ `sub2api-redis`（Redis7） |
 
-**配置方式**：
-- 数据库通过 `.env` 中的 `DATABASE_HOST`、`DATABASE_SSLMODE`、`POSTGRES_USER`、`POSTGRES_PASSWORD`、`POSTGRES_DB` 配置
-- Redis 通过 `docker-compose.override.yml` 覆盖 `REDIS_HOST`（因主 compose 文件硬编码为 `redis`），密码通过 `.env` 中的 `REDIS_PASSWORD` 配置
-- 各环境的 `docker-compose.override.yml` 已通过 `depends_on: !reset {}` 和 `redis: profiles: [disabled]` 去掉了对容器 Redis 的依赖
+### 切换镜像（最小停机）
 
-#### 数据库操作命令
-
-通过 SSH 在服务器上执行数据库操作：
+用 `docker-compose.override.yml` 覆盖镜像，只重启 sub2api：
 
 ```bash
-# 正式环境 - 查询迁移记录
-ssh clicodeplus "source /root/sub2api/deploy/.env && PGPASSWORD=\"\$POSTGRES_PASSWORD\" psql -h \$DATABASE_HOST -U \$POSTGRES_USER -d \$POSTGRES_DB -c 'SELECT * FROM schema_migrations ORDER BY applied_at DESC LIMIT 5;'"
-
-# Beta 环境 - 查询迁移记录
-ssh clicodeplus "source /root/sub2api-beta/deploy/.env && PGPASSWORD=\"\$POSTGRES_PASSWORD\" psql -h \$DATABASE_HOST -U \$POSTGRES_USER -d \$POSTGRES_DB -c 'SELECT * FROM schema_migrations ORDER BY applied_at DESC LIMIT 5;'"
-
-# Beta 环境 - 清除指定迁移记录（重新执行迁移）
-ssh clicodeplus "source /root/sub2api-beta/deploy/.env && PGPASSWORD=\"\$POSTGRES_PASSWORD\" psql -h \$DATABASE_HOST -U \$POSTGRES_USER -d \$POSTGRES_DB -c \"DELETE FROM schema_migrations WHERE filename LIKE '%049%';\""
-
-# Beta 环境 - 更新账号数据
-ssh clicodeplus "source /root/sub2api-beta/deploy/.env && PGPASSWORD=\"\$POSTGRES_PASSWORD\" psql -h \$DATABASE_HOST -U \$POSTGRES_USER -d \$POSTGRES_DB -c \"UPDATE accounts SET credentials = credentials - 'model_mapping' WHERE platform = 'antigravity';\""
-```
-
-> **注意**：使用 `source .env` 加载环境变量，避免在命令行中暴露密码。
-
-### 部署步骤
-
-**重要：每次部署都必须递增版本号！**
-
-#### 0. 递增版本号并推送（本地操作）
-
-每次部署前，先在本地递增小版本号并确保推送成功：
-
-```bash
-# 查看当前版本号
-cat backend/cmd/server/VERSION
-# 假设当前是 0.1.69.1
-
-# 递增版本号
-echo "0.1.69.2" > backend/cmd/server/VERSION
-git add backend/cmd/server/VERSION
-git commit -m "chore: bump version to 0.1.69.2"
-git push origin release/custom-0.1.69
-
-# ⚠️ 确认推送成功（必须看到分支更新输出，不能有 rejected 错误）
-```
-
-> **检查点**：如果有其他未提交的改动，应先 commit 并 push，确保 release 分支上的所有代码都已推送到远程。
-
-#### 1. 构建服务器拉取代码
-
-```bash
-# 拉取最新代码并切换分支
-ssh us-asaki-root "cd /root/sub2api && git fetch origin && git checkout -B release/custom-0.1.69 origin/release/custom-0.1.69"
-
-# ⚠️ 验证版本号与步骤 0 一致
-ssh us-asaki-root "cat /root/sub2api/backend/cmd/server/VERSION"
-```
-
-> **首次使用构建服务器？** 需要先初始化仓库，参见下方「构建服务器首次初始化」章节。
-
-#### 2. 构建服务器构建镜像
-
-```bash
-ssh us-asaki-root "cd /root/sub2api && docker build --no-cache -t sub2api:latest -f Dockerfile ."
-
-# ⚠️ 必须看到构建成功输出，如果失败需要先排查问题
-```
-
-> **常见构建问题**：
-> - `buildx` 版本过旧导致 API 版本不兼容 → 更新 buildx：`curl -fsSL "https://github.com/docker/buildx/releases/latest/download/buildx-$(curl -fsSL https://api.github.com/repos/docker/buildx/releases/latest | grep tag_name | cut -d'"' -f4).linux-amd64" -o ~/.docker/cli-plugins/docker-buildx && chmod +x ~/.docker/cli-plugins/docker-buildx`
-> - 磁盘空间不足 → `docker system prune -f` 清理无用镜像
-
-#### 3. 传输镜像到生产服务器并加载
-
-```bash
-# 导出镜像 → 通过管道传输 → 生产服务器加载
-ssh us-asaki-root "docker save sub2api:latest" | ssh clicodeplus "docker load"
-
-# ⚠️ 必须看到 "Loaded image: sub2api:latest" 输出
-```
-
-#### 4. 生产服务器同步代码、更新标签并重启
-
-```bash
-# 同步代码（用于版本号确认和 deploy 配置）
-ssh clicodeplus "cd /root/sub2api && git fetch fork && git checkout -B release/custom-0.1.69 fork/release/custom-0.1.69"
-
-# 更新镜像标签并重启
-ssh clicodeplus "docker tag sub2api:latest weishaw/sub2api:latest"
-ssh clicodeplus "cd /root/sub2api/deploy && docker compose up -d --force-recreate sub2api"
-```
-
-#### 5. 验证部署
-
-```bash
-# 查看启动日志
-ssh clicodeplus "docker logs sub2api --tail 20"
-
-# 确认版本号（必须与步骤 0 中设置的版本号一致）
-ssh clicodeplus "cat /root/sub2api/backend/cmd/server/VERSION"
-
-# 检查容器状态（必须显示 healthy）
-ssh clicodeplus "docker ps | grep sub2api"
-```
-
----
-
-### 构建服务器首次初始化
-
-首次使用 `us-asaki-root` 作为构建服务器时，需要执行以下一次性操作：
-
-```bash
-ssh us-asaki-root
-
-# 1) 克隆仓库
-cd /root
-git clone https://github.com/touwaeriol/sub2api.git sub2api
-cd sub2api
-
-# 2) 验证 Docker 和 buildx 版本
-docker version
-docker buildx version
-# 如果 buildx 版本过旧（< v0.14），执行更新：
-# LATEST=$(curl -fsSL https://api.github.com/repos/docker/buildx/releases/latest | grep tag_name | cut -d'"' -f4)
-# curl -fsSL "https://github.com/docker/buildx/releases/download/${LATEST}/buildx-${LATEST}.linux-amd64" -o ~/.docker/cli-plugins/docker-buildx
-# chmod +x ~/.docker/cli-plugins/docker-buildx
-
-# 3) 验证构建能力
-docker build --no-cache -t sub2api:test -f Dockerfile .
-docker rmi sub2api:test
-```
-
----
-
-## Beta 并行部署（不影响现网）
-
-目标：在同一台服务器上并行启动一个 beta 实例（例如端口 `8084`），**严禁改动/重启**现网实例（默认目录 `/root/sub2api`）。
-
-### 设计原则
-
-- **新目录**：beta 使用独立目录，例如 `/root/sub2api-beta`。
-- **敏感信息只放 `.env`**：beta 的数据库密码、JWT_SECRET 等只写入 `/root/sub2api-beta/deploy/.env`，不要提交到 git。
-- **独立 Compose Project**：通过 `docker compose -p sub2api-beta ...` 启动，确保 network/volume 隔离。
-- **独立端口**：通过 `.env` 的 `SERVER_PORT` 映射宿主机端口（例如 `8084:8080`）。
-
-### 前置检查
-
-```bash
-# 1) 确保 8084 未被占用
-ssh clicodeplus "ss -ltnp | grep :8084 || echo '8084 is free'"
-
-# 2) 确认现网容器还在（只读检查）
-ssh clicodeplus "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}' | sed -n '1,200p'"
-```
-
-### 首次部署步骤
-
-> **构建服务器说明**：正式和 beta 共用构建服务器上的 `/root/sub2api` 仓库，通过不同的镜像标签区分（`sub2api:latest` 用于正式，`sub2api:beta` 用于测试）。
-
-```bash
-# 1) 构建服务器构建 beta 镜像（共用 /root/sub2api 仓库，切到目标分支后打 beta 标签）
-ssh us-asaki-root "cd /root/sub2api && git fetch origin && git checkout -B release/custom-0.1.71 origin/release/custom-0.1.71"
-ssh us-asaki-root "cd /root/sub2api && docker build --no-cache -t sub2api:beta -f Dockerfile ."
-
-# ⚠️ 构建完成后如需恢复正式分支：
-# ssh us-asaki-root "cd /root/sub2api && git checkout release/custom-<正式版本>"
-
-# 2) 传输镜像到生产服务器
-ssh us-asaki-root "docker save sub2api:beta" | ssh clicodeplus "docker load"
-# ⚠️ 必须看到 "Loaded image: sub2api:beta" 输出
-
-# 3) 在生产服务器上准备 beta 环境
-ssh clicodeplus
-
-# 克隆代码（仅用于 deploy 配置和版本号确认，不在此构建）
-cd /root
-git clone https://github.com/touwaeriol/sub2api.git sub2api-beta
-cd /root/sub2api-beta
-git checkout release/custom-0.1.71
-
-# 4) 准备 beta 的 .env（敏感信息只写这里）
-cd /root/sub2api-beta/deploy
-
-# 推荐：从现网 .env 复制，保证除 DB 名/用户/端口外完全一致
-cp -f /root/sub2api/deploy/.env ./.env
-
-# 仅修改以下三项（其他保持不变）
-perl -pi -e 's/^SERVER_PORT=.*/SERVER_PORT=8084/' ./.env
-perl -pi -e 's/^POSTGRES_USER=.*/POSTGRES_USER=beta/' ./.env
-perl -pi -e 's/^POSTGRES_DB=.*/POSTGRES_DB=beta/' ./.env
-
-# 5) 写 compose override（避免与现网容器名冲突，镜像使用构建服务器传输的 sub2api:beta，Redis 使用外部服务）
-cat > docker-compose.override.yml <<'YAML'
+cat > /opt/sub2api/deploy/docker-compose.override.yml <<'EOF'
 services:
   sub2api:
-    image: sub2api:beta
-    container_name: sub2api-beta
-    environment:
-      - DATABASE_HOST=${DATABASE_HOST:-postgres}
-      - DATABASE_SSLMODE=${DATABASE_SSLMODE:-disable}
-      - REDIS_HOST=db.clicodeplus.com
-    depends_on: !reset {}
-  redis:
-    profiles:
-      - disabled
-YAML
+    image: ghcr.io/winghv/sub2api:0.1.133.2
+EOF
 
-# 6) 启动 beta（独立 project，确保不影响现网）
-cd /root/sub2api-beta/deploy
-docker compose -p sub2api-beta --env-file .env -f docker-compose.yml -f docker-compose.override.yml up -d
-
-# 7) 验证 beta
-curl -fsS http://127.0.0.1:8084/health
-docker logs sub2api-beta --tail 50
+cd /opt/sub2api/deploy
+docker compose up -d --force-recreate sub2api
 ```
 
-### 数据库配置约定（beta）
-
-- 数据库地址/SSL/密码：与现网一致（从现网 `.env` 复制即可），均指向 `db.clicodeplus.com`。
-- 仅修改：
-  - `POSTGRES_USER=beta`
-  - `POSTGRES_DB=beta`
-  - `REDIS_DB=2`
-
-注意：需要数据库侧已存在 `beta` 用户与 `beta` 数据库，并授予权限；否则容器会启动失败并不断重启。
-
-### 更新 beta（构建服务器构建 + 传输 + 仅重启 beta 容器）
+### 回滚
 
 ```bash
-# 1) 构建服务器拉取代码并构建镜像（共用 /root/sub2api 仓库）
-ssh us-asaki-root "cd /root/sub2api && git fetch origin && git checkout -B release/custom-0.1.71 origin/release/custom-0.1.71"
-ssh us-asaki-root "cd /root/sub2api && docker build --no-cache -t sub2api:beta -f Dockerfile ."
-# ⚠️ 必须看到构建成功输出
-
-# 2) 传输镜像到生产服务器
-ssh us-asaki-root "docker save sub2api:beta" | ssh clicodeplus "docker load"
-# ⚠️ 必须看到 "Loaded image: sub2api:beta" 输出
-
-# 3) 生产服务器同步代码（用于版本号确认和 deploy 配置）
-ssh clicodeplus "set -e; cd /root/sub2api-beta && git fetch --all --tags && git checkout -f release/custom-0.1.71 && git reset --hard origin/release/custom-0.1.71"
-
-# 4) 重启 beta 容器并验证
-ssh clicodeplus "cd /root/sub2api-beta/deploy && docker compose -p sub2api-beta --env-file .env -f docker-compose.yml -f docker-compose.override.yml up -d --no-deps --force-recreate sub2api"
-ssh clicodeplus "sleep 5 && curl -fsS http://127.0.0.1:8084/health"
-ssh clicodeplus "cat /root/sub2api-beta/backend/cmd/server/VERSION"
-```
-
-### 停止/回滚 beta（只影响 beta）
-
-```bash
-ssh clicodeplus "cd /root/sub2api-beta/deploy && docker compose -p sub2api-beta -f docker-compose.yml -f docker-compose.override.yml down"
-```
-
----
-
-## 服务器首次部署
-
-### 1. 构建服务器：克隆代码并配置远程仓库
-
-```bash
-ssh us-asaki-root
-cd /root
-git clone https://github.com/Wei-Shaw/sub2api.git
-cd sub2api
-
-# 添加 fork 仓库
-git remote add fork https://github.com/touwaeriol/sub2api.git
-```
-
-### 2. 构建服务器：切换到定制分支并构建镜像
-
-```bash
-git fetch fork
-git checkout -B release/custom-0.1.69 fork/release/custom-0.1.69
-
-cd /root/sub2api
-docker build -t sub2api:latest -f Dockerfile .
-exit
-```
-
-### 3. 传输镜像到生产服务器
-
-```bash
-ssh us-asaki-root "docker save sub2api:latest" | ssh clicodeplus "docker load"
-```
-
-### 4. 生产服务器：克隆代码并配置环境
-
-```bash
-ssh clicodeplus
-cd /root
-git clone https://github.com/Wei-Shaw/sub2api.git
-cd sub2api
-
-# 添加 fork 仓库
-git remote add fork https://github.com/touwaeriol/sub2api.git
-git fetch fork
-git checkout -B release/custom-0.1.69 fork/release/custom-0.1.69
-
-# 配置环境变量
-cd deploy
-cp .env.example .env
-vim .env  # 配置 DATABASE_HOST=db.clicodeplus.com, POSTGRES_PASSWORD, REDIS_PASSWORD, JWT_SECRET 等
-
-# 创建 override 文件（Redis 指向外部服务，去掉容器 Redis 依赖）
-cat > docker-compose.override.yml <<'YAML'
+cat > /opt/sub2api/deploy/docker-compose.override.yml <<'EOF'
 services:
   sub2api:
-    environment:
-      - REDIS_HOST=db.clicodeplus.com
-    depends_on: !reset {}
-  redis:
-    profiles:
-      - disabled
-YAML
+    image: ghcr.io/winghv/sub2api:0.1.133.1
+EOF
+cd /opt/sub2api/deploy && docker compose up -d --force-recreate sub2api
 ```
 
-### 5. 生产服务器：更新镜像标签并启动服务
+### 部署前备份
 
 ```bash
-docker tag sub2api:latest weishaw/sub2api:latest
-cd /root/sub2api/deploy && docker compose up -d
+ssh rn-4h-4g "mkdir -p /opt/sub2api/backup && docker exec sub2api-postgres pg_dump -U sub2api -d sub2api | gzip > /opt/sub2api/backup/pre-$(date +%Y%m%d-%H%M%S).sql.gz"
 ```
 
-### 6. 验证部署
+### 常用运维命令
 
 ```bash
-# 查看应用日志
-docker logs sub2api --tail 50
-
-# 检查健康状态
-curl http://localhost:8080/health
-
-# 确认版本号
-cat /root/sub2api/backend/cmd/server/VERSION
-```
-
-### 7. 常用运维命令
-
-```bash
-# 查看实时日志
-docker logs -f sub2api
-
-# 重启服务
-docker compose restart sub2api
-
-# 停止所有服务
-docker compose down
-
-# 停止并删除数据卷（慎用！会删除数据库数据）
-docker compose down -v
-
-# 查看资源使用情况
-docker stats sub2api
+ssh rn-4h-4g "docker logs sub2api --tail 50"
+ssh rn-4h-4g "docker exec sub2api-postgres psql -U sub2api -d sub2api -c 'SELECT filename FROM schema_migrations ORDER BY filename DESC LIMIT 10;'"
+ssh rn-4h-4g "docker ps --filter name=sub2api --format '{{.Names}}\t{{.Status}}\t{{.Image}}'"
 ```
 
 ---
@@ -581,10 +232,7 @@ x-api-key: admin-xxx
 
 | 环境 | 基础地址 | 说明 |
 |------|----------|------|
-| 正式 | `https://clicodeplus.com` | 生产环境 |
-| Beta | `http://<服务器IP>:8084` | 仅内网访问 |
-| OpenAI | `http://<服务器IP>:8083` | 仅内网访问 |
-| Star | `https://hyntoken.com` | 独立环境 |
+| 正式 | `https://api.superwhv.me` | 生产环境（Cloudflare Tunnel） |
 
 > 以下接口文档中，`${BASE}` 代表环境基础地址，`${KEY}` 代表 `.env` 中的 `ADMIN_API_KEY`。操作前执行 `source .env` 或 `export KEY=$ADMIN_API_KEY` 加载。
 
@@ -1003,18 +651,17 @@ curl -s "${BASE}/api/v1/admin/groups/all" -H "x-api-key: ${KEY}"
 
 ## 注意事项
 
-1. **前端必须打包进镜像**：使用 `docker build` 在构建服务器（`us-asaki-root`）上构建，Dockerfile 会自动编译前端并 embed 到后端二进制中，构建完成后通过 `docker save | docker load` 传输到生产服务器（`clicodeplus`）
+1. **镜像由 CI 自动构建**：打 tag 推送后，GitHub Actions release.yml + goreleaser 自动构建推送到 `ghcr.io/winghv/sub2api`
 
-2. **镜像标签**：docker-compose.yml 使用 `weishaw/sub2api:latest`，本地构建后需要 `docker tag` 覆盖
+2. **生产切换用 override**：`docker-compose.override.yml` 覆盖 image 版本，只重启 sub2api，秒级停机
 
-3. **Windows 换行符问题**：已通过 `.gitattributes` 解决，确保 `*.sql` 文件始终使用 LF
+3. **Windows 换行符**：`.gitattributes` 确保 `*.sql` 使用 LF
 
-4. **版本号管理**：每次发布必须更新 `backend/cmd/server/VERSION` 并打标签
+4. **版本号**：每次发布更新 `backend/cmd/server/VERSION`，打 annotated tag `v0.1.XXX.Y`
 
-5. **合并冲突**：合并上游新版本时，重点关注以下文件可能的冲突：
-   - `backend/internal/service/antigravity_gateway_service.go`
-   - `backend/internal/service/gateway_service.go`
-   - `backend/internal/pkg/antigravity/request_transformer.go`
+5. **合并冲突重点**：`antigravity_gateway_service.go`、`gateway_service.go`
+
+6. **本地验证**：无 Go 环境，后端验证须用 `docker build`；前端可用 `pnpm typecheck && pnpm build`
 
 ---
 
@@ -1284,7 +931,7 @@ PR 目标是上游官方仓库，**只包含通用功能改动**（bug fix、新
 1. 从 `develop` 创建功能分支，只包含要提交给上游的改动
 2. 推送分支后，**等待 4 个 CI job 全部通过**
 3. 确认通过后再创建 PR
-4. 使用 `gh run list --repo touwaeriol/sub2api --branch <branch>` 检查状态
+4. 使用 `gh run list --repo winghv/sub2api --branch <branch>` 检查状态
 
 ### 自有分支推送（develop / main）
 
@@ -1311,7 +958,7 @@ gofmt -l ./...
 ```
 
 **推送后确认**：
-1. 使用 `gh run list --repo touwaeriol/sub2api --branch <branch>` 检查 GitHub Actions 状态
+1. 使用 `gh run list --repo winghv/sub2api --branch <branch>` 检查 GitHub Actions 状态
 2. 确认 CI 和 Security Scan 两个 workflow 的 4 个 job 全部绿色 ✅
 3. 任何 job 失败必须立即修复，**禁止在 CI 未通过的状态下继续后续操作**
 
@@ -1321,7 +968,7 @@ gofmt -l ./...
 2. 递增 `backend/cmd/server/VERSION`，提交并推送
 3. 推送后确认 GitHub Actions 的 4 个 CI job 全部通过
 4. **CI 未通过时禁止部署** — 必须先修复问题
-5. 使用 `gh run list --repo touwaeriol/sub2api --limit 10` 确认状态
+5. 使用 `gh run list --repo winghv/sub2api --limit 10` 确认状态
 
 ### 常见 CI 失败原因及修复
 - **gofmt**：struct 字段对齐不一致 → 运行 `gofmt -w <file>` 修复
@@ -1389,4 +1036,4 @@ ASCII 示意图或实际截图
 - **中英文顺序**：同一段落先中文后英文，用空行分隔，不用 `---` 分割同段内容
 - **改动分类**：按 Backend / Frontend / Config 等模块分组，先列中文要点再列英文要点
 - **截图/示意图**：有 UI 变动时必须附上，可用 ASCII 示意布局
-- **目标分支**：提交到 `touwaeriol/sub2api` 的 `main` 分支
+- **目标分支**：提交到 `winghv/sub2api` 的 `main` 分支
