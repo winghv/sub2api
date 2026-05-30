@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen bg-gray-50 text-gray-900 dark:bg-dark-950 dark:text-white">
-    <header class="border-b border-gray-200 bg-white/95 dark:border-dark-800 dark:bg-dark-900/95">
+  <div class="cyber-page text-white">
+    <header class="cyber-page-header">
       <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
         <RouterLink to="/home" class="flex min-w-0 items-center gap-3">
-          <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-200 dark:bg-dark-800 dark:ring-dark-700">
+          <span class="cyber-brand-mark flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden">
             <img :src="siteLogo || '/logo.png'" alt="Logo" class="h-full w-full object-contain" />
           </span>
-          <span class="truncate text-base font-semibold text-gray-950 dark:text-white">
+          <span class="cyber-page-title truncate text-base font-semibold">
             {{ siteName }}
           </span>
         </RouterLink>
         <RouterLink
           to="/login"
-          class="inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-primary-600/20 transition hover:bg-primary-700"
+          class="cyber-button inline-flex flex-shrink-0 items-center justify-center px-4 py-2 text-sm font-semibold transition"
         >
           登录
         </RouterLink>
@@ -26,7 +26,7 @@
 
       <section
         v-else-if="loadError"
-        class="rounded-lg border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200"
+        class="cyber-panel border-red-500/30 p-6 text-red-200"
       >
         <h1 class="text-lg font-semibold">文档加载失败</h1>
         <p class="mt-2 text-sm">请稍后刷新页面重试。</p>
@@ -34,33 +34,33 @@
 
       <section
         v-else-if="!currentDocument"
-        class="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-700 dark:bg-dark-900"
+        class="cyber-panel p-6"
       >
         <div class="flex items-start gap-3">
-          <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-gray-100 text-gray-600 dark:bg-dark-800 dark:text-dark-300">
+          <span class="cyber-panel-muted flex h-10 w-10 flex-shrink-0 items-center justify-center text-cyan-200">
             <Icon name="document" size="sm" />
           </span>
           <div>
-            <h1 class="text-lg font-semibold text-gray-900 dark:text-white">文档不存在</h1>
-            <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-dark-300">
+            <h1 class="cyber-page-title text-lg font-semibold">文档不存在</h1>
+            <p class="cyber-page-text mt-2 text-sm leading-6">
               当前条款文档不存在或已被管理员移除。
             </p>
           </div>
         </div>
       </section>
 
-      <article v-else>
-        <div class="mb-8 border-b border-gray-200 pb-6 dark:border-dark-700">
+      <article v-else class="cyber-panel p-6 sm:p-8">
+        <div class="mb-8 border-b border-cyan-300/15 pb-6">
           <div class="flex items-start gap-4">
-            <span class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-300">
+            <span class="cyber-panel-muted flex h-12 w-12 flex-shrink-0 items-center justify-center text-lime-300">
               <Icon :name="documentIcon" size="md" />
             </span>
             <div class="min-w-0">
-              <p class="text-sm font-medium text-primary-700 dark:text-primary-300">登录条款</p>
-              <h1 class="mt-2 break-words text-2xl font-bold tracking-normal text-gray-950 dark:text-white sm:text-3xl">
+              <p class="text-sm font-medium text-lime-300">登录条款</p>
+              <h1 class="cyber-page-title mt-2 break-words text-2xl font-bold tracking-normal sm:text-3xl">
                 {{ currentDocument.title }}
               </h1>
-              <p v-if="updatedAt" class="mt-3 text-sm text-gray-500 dark:text-dark-400">
+              <p v-if="updatedAt" class="cyber-page-text mt-3 text-sm">
                 更新日期：{{ updatedAt }}
               </p>
             </div>
@@ -74,7 +74,7 @@
         ></div>
         <div
           v-else
-          class="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-14 text-center text-sm text-gray-500 dark:border-dark-700 dark:bg-dark-900 dark:text-dark-400"
+          class="cyber-panel-muted border-dashed px-6 py-14 text-center text-sm text-cyan-100/70"
         >
           暂无正文内容
         </div>
@@ -91,6 +91,7 @@ import DOMPurify from 'dompurify'
 import Icon from '@/components/icons/Icon.vue'
 import { getPublicSettings } from '@/api/auth'
 import { sanitizeUrl } from '@/utils/url'
+import { DEFAULT_SITE_NAME } from '@/utils/brand'
 import type { LoginAgreementDocument, PublicSettings } from '@/types'
 
 type LegalDocumentIcon = 'document' | 'shield' | 'globe' | 'cog'
@@ -107,7 +108,7 @@ marked.setOptions({
 
 const documentId = computed(() => String(route.params.documentId || ''))
 const documents = computed(() => settings.value?.login_agreement_documents ?? [])
-const siteName = computed(() => settings.value?.site_name || 'Sub2API')
+const siteName = computed(() => settings.value?.site_name || DEFAULT_SITE_NAME)
 const siteLogo = computed(() => sanitizeUrl(settings.value?.site_logo || '', {
   allowRelative: true,
   allowDataUrl: true,
@@ -168,7 +169,9 @@ onMounted(async () => {
 }
 
 .legal-document-content :deep(h1) {
-  @apply mb-4 mt-8 border-b border-gray-200 pb-3 text-3xl font-bold dark:border-dark-700;
+  @apply mb-4 mt-8 pb-3 text-3xl font-bold;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.18);
+  color: #f7fcff;
 }
 
 .legal-document-content :deep(h2) {
@@ -184,11 +187,13 @@ onMounted(async () => {
 }
 
 .legal-document-content :deep(p) {
-  @apply mb-4 text-gray-700 dark:text-dark-200;
+  @apply mb-4;
+  color: #d7f7ff;
 }
 
 .legal-document-content :deep(a) {
-  @apply text-primary-600 underline underline-offset-4 hover:text-primary-700 dark:text-primary-300 dark:hover:text-primary-200;
+  @apply underline underline-offset-4;
+  color: #39ff14;
 }
 
 .legal-document-content :deep(ul) {
@@ -200,15 +205,20 @@ onMounted(async () => {
 }
 
 .legal-document-content :deep(li) {
-  @apply mb-1 text-gray-700 dark:text-dark-200;
+  @apply mb-1;
+  color: #d7f7ff;
 }
 
 .legal-document-content :deep(blockquote) {
-  @apply my-5 border-l-4 border-gray-300 pl-4 text-gray-600 dark:border-dark-600 dark:text-dark-300;
+  @apply my-5 border-l-4 pl-4;
+  border-color: rgba(0, 229, 255, 0.34);
+  color: #9db4c7;
 }
 
 .legal-document-content :deep(code) {
-  @apply rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-dark-800;
+  @apply rounded px-1.5 py-0.5 font-mono text-sm;
+  background: rgba(0, 229, 255, 0.1);
+  color: #dfffd8;
 }
 
 .legal-document-content :deep(pre) {
@@ -224,11 +234,15 @@ onMounted(async () => {
 }
 
 .legal-document-content :deep(th) {
-  @apply border border-gray-300 bg-gray-50 px-3 py-2 text-left font-semibold dark:border-dark-600 dark:bg-dark-800;
+  @apply px-3 py-2 text-left font-semibold;
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  background: rgba(0, 229, 255, 0.08);
+  color: #cde4f2;
 }
 
 .legal-document-content :deep(td) {
-  @apply border border-gray-300 px-3 py-2 dark:border-dark-600;
+  @apply px-3 py-2;
+  border: 1px solid rgba(0, 229, 255, 0.14);
 }
 
 .legal-document-content :deep(img) {
@@ -236,6 +250,7 @@ onMounted(async () => {
 }
 
 .legal-document-content :deep(hr) {
-  @apply my-7 border-gray-200 dark:border-dark-700;
+  @apply my-7;
+  border-color: rgba(0, 229, 255, 0.18);
 }
 </style>

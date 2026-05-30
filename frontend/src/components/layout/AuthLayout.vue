@@ -573,6 +573,52 @@ onMounted(() => {
   color: #9db4c7;
 }
 
+:deep(.auth-card h2),
+:deep(.auth-card h1) {
+  color: #ffffff !important;
+  letter-spacing: 0;
+}
+
+:deep(.auth-card p),
+:deep(.auth-card .text-gray-300),
+:deep(.auth-card .text-gray-400),
+:deep(.auth-card .text-gray-500),
+:deep(.auth-card .text-gray-600),
+:deep(.auth-card .text-gray-700),
+:deep(.auth-card .dark\:text-gray-300),
+:deep(.auth-card .dark\:text-gray-400),
+:deep(.auth-card .dark\:text-dark-400) {
+  color: #9db4c7 !important;
+}
+
+:deep(.auth-card .text-gray-900),
+:deep(.auth-card .dark\:text-white) {
+  color: #f7fcff !important;
+}
+
+:deep(.auth-card .bg-gray-50),
+:deep(.auth-card .bg-white),
+:deep(.auth-card .dark\:bg-dark-800\/60),
+:deep(.auth-card .dark\:bg-dark-900\/50) {
+  border-color: rgba(0, 229, 255, 0.18) !important;
+  background: rgba(8, 16, 34, 0.66) !important;
+}
+
+:deep(.auth-card .border-gray-200),
+:deep(.auth-card .dark\:border-dark-600) {
+  border-color: rgba(0, 229, 255, 0.2) !important;
+}
+
+:deep(.auth-card label.bg-white),
+:deep(.auth-card label.dark\:bg-dark-900\/50) {
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+}
+
+:deep(.auth-card input[type='checkbox']) {
+  accent-color: #39ff14;
+}
+
 @media (max-width: 980px) {
   .auth-layout {
     grid-template-columns: 1fr;
