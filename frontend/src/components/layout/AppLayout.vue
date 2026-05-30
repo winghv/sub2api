@@ -11,7 +11,7 @@
 
     <!-- Main Content Area -->
     <div
-      class="relative min-h-screen transition-all duration-300"
+      class="app-content relative min-h-screen transition-all duration-300"
       :class="[sidebarCollapsed ? 'lg:ml-[72px]' : 'lg:ml-64']"
     >
       <!-- Header -->
@@ -134,7 +134,7 @@ defineExpose({ replayTour })
   background-size: 7px 7px;
 }
 
-.app-shell > :not(.app-backdrop) {
+.app-content {
   position: relative;
   z-index: 3;
 }
