@@ -198,14 +198,15 @@ type CreateGroupInput struct {
 	WeeklyLimitUSD   *float64 // 周限额 (USD)
 	MonthlyLimitUSD  *float64 // 月限额 (USD)
 	// 图片生成计费配置（仅 antigravity 平台使用）
-	AllowImageGeneration bool
-	ImageRateIndependent bool
-	ImageRateMultiplier  *float64
-	ImagePrice1K         *float64
-	ImagePrice2K         *float64
-	ImagePrice4K         *float64
-	ClaudeCodeOnly       bool   // 仅允许 Claude Code 客户端
-	FallbackGroupID      *int64 // 降级分组 ID
+	AllowImageGeneration     bool
+	ImageRateIndependent     bool
+	ImageRateMultiplier      *float64
+	ImagePrice1K             *float64
+	ImagePrice2K             *float64
+	ImagePrice4K             *float64
+	ClaudeCodeOnly           bool   // 仅允许 Claude Code 客户端
+	FallbackGroupID          *int64 // 降级分组 ID
+	SimulateClaudeMaxEnabled *bool  // 模拟 Claude Max 订阅计费（仅 anthropic 平台）
 	// 无效请求兜底分组 ID（仅 anthropic 平台使用）
 	FallbackGroupIDOnInvalidRequest *int64
 	// 模型路由配置（仅 anthropic 平台使用）
@@ -239,14 +240,15 @@ type UpdateGroupInput struct {
 	WeeklyLimitUSD   *float64 // 周限额 (USD)
 	MonthlyLimitUSD  *float64 // 月限额 (USD)
 	// 图片生成计费配置（仅 antigravity 平台使用）
-	AllowImageGeneration *bool
-	ImageRateIndependent *bool
-	ImageRateMultiplier  *float64
-	ImagePrice1K         *float64
-	ImagePrice2K         *float64
-	ImagePrice4K         *float64
-	ClaudeCodeOnly       *bool  // 仅允许 Claude Code 客户端
-	FallbackGroupID      *int64 // 降级分组 ID
+	AllowImageGeneration     *bool
+	ImageRateIndependent     *bool
+	ImageRateMultiplier      *float64
+	ImagePrice1K             *float64
+	ImagePrice2K             *float64
+	ImagePrice4K             *float64
+	ClaudeCodeOnly           *bool  // 仅允许 Claude Code 客户端
+	FallbackGroupID          *int64 // 降级分组 ID
+	SimulateClaudeMaxEnabled *bool  // 模拟 Claude Max 订阅计费（仅 anthropic 平台）
 	// 无效请求兜底分组 ID（仅 anthropic 平台使用）
 	FallbackGroupIDOnInvalidRequest *int64
 	// 模型路由配置（仅 anthropic 平台使用）
@@ -1664,13 +1666,20 @@ func defaultModelsListCandidateIDs(platform string) []string {
 }
 
 func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupInput) (*Group, error) {
-	if input.RateMultiplier <= 0 {
-		return nil, errors.New("rate_multiplier must be > 0")
-	}
-
 	platform := input.Platform
 	if platform == "" {
 		platform = PlatformAnthropic
+	}
+	simulateClaudeMaxEnabled := false
+	if input.SimulateClaudeMaxEnabled != nil {
+		simulateClaudeMaxEnabled = *input.SimulateClaudeMaxEnabled
+	}
+	if simulateClaudeMaxEnabled && platform != PlatformAnthropic {
+		return nil, errors.New("simulate_claude_max_enabled only supported for anthropic groups")
+	}
+
+	if input.RateMultiplier <= 0 {
+		return nil, errors.New("rate_multiplier must be > 0")
 	}
 
 	subscriptionType := input.SubscriptionType
@@ -1769,6 +1778,7 @@ func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupIn
 		ImagePrice4K:                    imagePrice4K,
 		ClaudeCodeOnly:                  input.ClaudeCodeOnly,
 		FallbackGroupID:                 input.FallbackGroupID,
+		SimulateClaudeMaxEnabled:        simulateClaudeMaxEnabled,
 		FallbackGroupIDOnInvalidRequest: fallbackOnInvalidRequest,
 		ModelRouting:                    input.ModelRouting,
 		MCPXMLInject:                    mcpXMLInject,
@@ -1979,6 +1989,16 @@ func (s *adminServiceImpl) UpdateGroup(ctx context.Context, id int64, input *Upd
 			group.FallbackGroupID = nil
 		}
 	}
+	if input.SimulateClaudeMaxEnabled != nil {
+		if *input.SimulateClaudeMaxEnabled && group.Platform != PlatformAnthropic {
+			return nil, errors.New("simulate_claude_max_enabled only supported for anthropic groups")
+		}
+		group.SimulateClaudeMaxEnabled = *input.SimulateClaudeMaxEnabled
+	}
+	if group.Platform != PlatformAnthropic {
+		group.SimulateClaudeMaxEnabled = false
+	}
+
 	fallbackOnInvalidRequest := group.FallbackGroupIDOnInvalidRequest
 	if input.FallbackGroupIDOnInvalidRequest != nil {
 		if *input.FallbackGroupIDOnInvalidRequest > 0 {
