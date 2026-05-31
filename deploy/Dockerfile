@@ -19,8 +19,8 @@ FROM ${NODE_IMAGE} AS frontend-builder
 
 WORKDIR /app/frontend
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Install pnpm. Keep this pinned to the same major version used by GitHub Actions.
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 # Install dependencies first (better caching)
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
