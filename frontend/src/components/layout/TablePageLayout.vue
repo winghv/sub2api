@@ -105,6 +105,12 @@ onUnmounted(() => {
 }
 
 /* 移动端：恢复正常滚动 */
+.table-page-layout.mobile-mode {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+}
+
 .table-page-layout.mobile-mode .table-scroll-container {
   @apply h-auto overflow-visible shadow-none;
   border-color: rgba(0, 229, 255, 0.14);
