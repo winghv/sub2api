@@ -706,6 +706,46 @@ func ensureOpenAIResponsesImageGenerationTool(reqBody map[string]any) bool {
 	return true
 }
 
+// stripOpenAIResponsesImageGenerationTools removes any client-supplied
+// image_generation tool (and matching tool_choice) from the request. It is used
+// when the Codex image_generation bridge is explicitly disabled for the
+// account/channel: the upstream does not accept the image_generation tool, and
+// Codex CLI always attaches it by default, so leaving it in place causes the
+// upstream to reject the request (e.g. 403 "Image generation is not enabled for
+// this group"). Returns true when the request body was modified.
+func stripOpenAIResponsesImageGenerationTools(reqBody map[string]any) bool {
+	if len(reqBody) == 0 {
+		return false
+	}
+
+	modified := false
+	if rawTools, ok := reqBody["tools"].([]any); ok {
+		kept := make([]any, 0, len(rawTools))
+		for _, rawTool := range rawTools {
+			toolMap, ok := rawTool.(map[string]any)
+			if ok && strings.TrimSpace(firstNonEmptyString(toolMap["type"])) == "image_generation" {
+				modified = true
+				continue
+			}
+			kept = append(kept, rawTool)
+		}
+		if modified {
+			if len(kept) == 0 {
+				delete(reqBody, "tools")
+			} else {
+				reqBody["tools"] = kept
+			}
+		}
+	}
+
+	if openAIAnyToolChoiceSelectsImageGeneration(reqBody["tool_choice"]) {
+		delete(reqBody, "tool_choice")
+		modified = true
+	}
+
+	return modified
+}
+
 func applyCodexImageGenerationBridgeInstructions(reqBody map[string]any) bool {
 	if len(reqBody) == 0 || !hasOpenAIImageGenerationTool(reqBody) {
 		return false

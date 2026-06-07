@@ -2458,6 +2458,13 @@ func (s *OpenAIGatewayService) Forward(ctx context.Context, c *gin.Context, acco
 		bodyModified = true
 		disablePatch()
 		logger.LegacyPrintf("service.openai_gateway", "[OpenAI] Injected /responses image_generation tool for Codex client")
+	} else if isCodexCLI && !codexImageGenerationBridgeEnabled && stripOpenAIResponsesImageGenerationTools(reqBody) {
+		// Bridge disabled: Codex CLI attaches image_generation by default, but the
+		// upstream rejects it (403 "Image generation is not enabled for this group").
+		// Strip the client-supplied tool so the request is forwarded cleanly.
+		bodyModified = true
+		disablePatch()
+		logger.LegacyPrintf("service.openai_gateway", "[OpenAI] Stripped client image_generation tool (bridge disabled) for Codex client")
 	}
 
 	if normalizeOpenAIResponsesImageGenerationTools(reqBody) {

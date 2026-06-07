@@ -1252,3 +1252,52 @@ func TestFilterCodexInput_DropsReasoningItemsRegardlessOfPreserveReferences(t *t
 		})
 	}
 }
+
+func TestStripOpenAIResponsesImageGenerationTools_RemovesToolAndToolChoice(t *testing.T) {
+	reqBody := map[string]any{
+		"model": "gpt-5.2",
+		"tools": []any{
+			map[string]any{"type": "function", "name": "shell"},
+			map[string]any{"type": "image_generation", "output_format": "png"},
+		},
+		"tool_choice": map[string]any{"type": "image_generation"},
+	}
+
+	require.True(t, stripOpenAIResponsesImageGenerationTools(reqBody))
+
+	tools, ok := reqBody["tools"].([]any)
+	require.True(t, ok)
+	require.Len(t, tools, 1)
+	require.Equal(t, "function", tools[0].(map[string]any)["type"])
+	_, hasChoice := reqBody["tool_choice"]
+	require.False(t, hasChoice)
+	require.False(t, hasOpenAIImageGenerationTool(reqBody))
+}
+
+func TestStripOpenAIResponsesImageGenerationTools_DropsToolsKeyWhenEmpty(t *testing.T) {
+	reqBody := map[string]any{
+		"model": "gpt-5.2",
+		"tools": []any{
+			map[string]any{"type": "image_generation"},
+		},
+	}
+
+	require.True(t, stripOpenAIResponsesImageGenerationTools(reqBody))
+	_, hasTools := reqBody["tools"]
+	require.False(t, hasTools)
+}
+
+func TestStripOpenAIResponsesImageGenerationTools_NoopWhenAbsent(t *testing.T) {
+	reqBody := map[string]any{
+		"model": "gpt-5.2",
+		"tools": []any{
+			map[string]any{"type": "function", "name": "shell"},
+		},
+		"tool_choice": "auto",
+	}
+
+	require.False(t, stripOpenAIResponsesImageGenerationTools(reqBody))
+	tools := reqBody["tools"].([]any)
+	require.Len(t, tools, 1)
+	require.Equal(t, "auto", reqBody["tool_choice"])
+}
