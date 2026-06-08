@@ -1,0 +1,769 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: 
+      - text: 目录
+    - link "1. 购买渠道" [ref=e6] [cursor=pointer]:
+      - /url: "#buy"
+    - link "2. 重要说明" [ref=e7] [cursor=pointer]:
+      - /url: "#important"
+    - link "4. 常遇问题" [ref=e8] [cursor=pointer]:
+      - /url: "#faq"
+    - link "5. 安装教程" [ref=e9] [cursor=pointer]:
+      - /url: "#install"
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - heading "🔥 Claude + Codex + Gemini + OpenClaw" [level=1] [ref=e12]
+      - paragraph [ref=e13]: 支持 Claude Code、Codex、Gemini CLI、OpenClaw 国内直连与配置，官方原版体验
+    - generic [ref=e14]:
+      - heading "🛒 购买渠道 & 售后服务" [level=2] [ref=e15]
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - heading "一号店铺" [level=4] [ref=e19]
+          - img "一号店铺" [ref=e21] [cursor=pointer]
+          - button "复制地址" [ref=e23] [cursor=pointer]
+        - generic [ref=e24]:
+          - heading "二号店铺" [level=4] [ref=e26]
+          - img "三号店铺" [ref=e28] [cursor=pointer]
+          - button "复制地址" [ref=e30] [cursor=pointer]
+        - generic [ref=e31]:
+          - heading "三号店铺" [level=4] [ref=e33]
+          - img "四号店铺" [ref=e35] [cursor=pointer]
+          - button "复制地址" [ref=e37] [cursor=pointer]
+        - generic [ref=e38]:
+          - heading "售后服务" [level=4] [ref=e40]
+          - img "售后服务" [ref=e42] [cursor=pointer]
+          - paragraph [ref=e44]: 技术支持服务升级通知群
+        - generic [ref=e45]:
+          - heading "售后群2" [level=4] [ref=e47]
+          - img "售后群2" [ref=e49] [cursor=pointer]
+          - paragraph [ref=e51]: 技术支持服务升级通知群2
+    - generic [ref=e52]:
+      - heading "为什么选我？" [level=3] [ref=e53]
+      - generic [ref=e54]:
+        - generic [ref=e55]: ✅ 双平台 - 一站搞定两大 AI 编程神器
+        - generic [ref=e56]: ✅ 稳定 - 告别 500/422/402，专线直连
+        - generic [ref=e57]: ✅ 低价 - 同等服务价格最优
+        - generic [ref=e58]: ✅ 无限制 - 不限 key、设备
+        - generic [ref=e59]: ✅ 售后好 - 服务原因不可用按量退
+    - generic [ref=e60]:
+      - heading "🚨 重要说明" [level=2] [ref=e61]
+      - paragraph [ref=e63]: Claude Code / Gemini CLI 都有一定上手门槛。我只负责你在官方客户端能用上，第三方包装客户端什么的需要自行研究。
+    - generic [ref=e64]:
+      - heading "🤔 常遇问题" [level=2] [ref=e65]
+      - generic [ref=e66]:
+        - generic [ref=e67]: 重点提示
+        - heading "Codex 日卡周卡月卡看这里" [level=3] [ref=e68]
+        - paragraph [ref=e69]:
+          - text: 官网兑换地址：
+          - link "https://cc.sub.258000.sbs/" [ref=e70] [cursor=pointer]:
+            - /url: https://cc.sub.258000.sbs/
+        - generic [ref=e71]:
+          - heading "兑换码使用教程（重要）" [level=4] [ref=e72]
+          - list [ref=e73]:
+            - listitem [ref=e74]: 进入网站创建账号并完成基础信息填写。
+            - listitem [ref=e75]: 使用兑换码完成核销（可在左侧“兑换”菜单操作）。
+            - listitem [ref=e76]: 创建秘钥（名称可自定义，分组选择每天50或者每天100刀分组，其他分组不能用）。
+            - listitem [ref=e77]: 使用记录查询（左侧“使用记录”查看明细，右上角可看每日消耗）。
+        - paragraph [ref=e78]:
+          - text: 当前生成密钥可以在
+          - code [ref=e79]: claudecode
+          - text: 中使用，
+          - code [ref=e80]: claudecode
+          - text: 只需要配置请求地址和密钥，模型名不要动，后台会自动映射到
+          - code [ref=e81]: gpt-5.4
+          - text: 模型。也可以在
+          - code [ref=e82]: opencode
+          - text: 、
+          - code [ref=e83]: codex
+          - text: 、
+          - code [ref=e84]: openclaw
+          - text: 中进行使用，具体教程请看下面的教程。
+    - generic [ref=e85]:
+      - heading "5. 安装与使用教程" [level=2] [ref=e86]
+      - generic [ref=e87]:
+        - button "Claude Code" [ref=e88] [cursor=pointer]
+        - button "Codex" [ref=e89] [cursor=pointer]
+        - button "Gemini" [ref=e90] [cursor=pointer]
+        - button "CC-Switch" [ref=e91] [cursor=pointer]
+        - button "Opencode" [ref=e92] [cursor=pointer]
+        - button "OpenClaw" [ref=e93] [cursor=pointer]
+        - button "VSCode & Cursor" [ref=e94] [cursor=pointer]
+        - button "状态栏插件" [ref=e95] [cursor=pointer]
+        - button "MCP 服务器" [ref=e96] [cursor=pointer]
+      - text:    ▶ ✓ ✓ ✓ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ✓ ✓ ✓ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ✓ ✓ ✓ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶ ▶
+      - generic [ref=e392]:
+        - heading "🦞 OpenClaw 配置教程" [level=2] [ref=e393]
+        - paragraph [ref=e394]:
+          - text: OpenClaw（原 Clawdbot / Moltbot）是一个开源的个人 AI 助手系统，支持 Telegram、Discord、WhatsApp 等多种消息渠道，也支持通过自定义 provider 连接中转服务。下面这套内容按
+          - code [ref=e395]: cc.yoouu.cn
+          - text: 的页面表现方式整理到了当前项目里，直接照着抄就能用。
+        - generic [ref=e396]:
+          - link "官方文档" [ref=e397] [cursor=pointer]:
+            - /url: https://docs.openclaw.ai
+          - link "GitHub" [ref=e398] [cursor=pointer]:
+            - /url: https://github.com/openclaw/openclaw
+          - link "快速开始" [ref=e399] [cursor=pointer]:
+            - /url: https://docs.openclaw.ai/zh-CN/start/quickstart
+        - generic [ref=e400]:
+          - heading "⚠️ 先说人话：Windows 用户必须用 PowerShell 或 Windows Terminal" [level=3] [ref=e401]
+          - paragraph [ref=e402]:
+            - text: 官方更推荐在 Windows 上使用 WSL2，但原生 Windows 也可以跑。别用
+            - code [ref=e403]: cmd
+            - text: ，那玩意儿太古早，路径、编码、环境变量全都容易翻车。
+        - heading "1️⃣ 系统要求" [level=3] [ref=e404]
+        - generic [ref=e405]:
+          - generic [ref=e406]:
+            - text: ✅ Node.js
+            - code [ref=e407]: ">= 22"
+          - generic [ref=e408]: ✅ 支持 macOS / Linux / Windows
+          - generic [ref=e409]: ✅ Windows 官方推荐 WSL2
+          - generic [ref=e410]: ✅ 前置要求：先安装 Git
+          - generic [ref=e411]: ✅ 推荐使用 PowerShell 或 Windows Terminal
+        - generic [ref=e412]:
+          - button "▶ 前置要求：安装 Git" [ref=e413] [cursor=pointer]
+          - generic [ref=e414]:
+            - paragraph [ref=e415]:
+              - text: 先把 Git 装好，再折腾 OpenClaw。Windows 用户建议升级到
+              - code [ref=e416]: Git 2.40+
+              - text: ，老版本
+              - code [ref=e417]: cygpath.exe
+              - text: 在中文路径下容易抽风。
+            - generic [ref=e418]:
+              - link "官方下载" [ref=e419] [cursor=pointer]:
+                - /url: https://git-scm.com/downloads/win
+              - link "国内加速下载" [ref=e420] [cursor=pointer]:
+                - /url: https://static.itssx.com/f/kjHz/Git-2.53.0-64-bit.exe
+              - link "Cloudflare 加速" [ref=e421] [cursor=pointer]:
+                - /url: https://staticacc.itssx.com/f/kjHz/Git-2.53.0-64-bit.exe
+            - paragraph [ref=e422]:
+              - text: ⚠️ 按
+              - code [ref=e423]: Win + X
+              - text: → 打开「终端」或「PowerShell」，不要再拿
+              - code [ref=e424]: cmd
+              - text: 给自己上强度。
+            - generic [ref=e425]:
+              - generic [ref=e426]:
+                - generic [ref=e427]: PowerShell
+                - button "复制" [ref=e428] [cursor=pointer]
+              - code [ref=e430]: git --version winget upgrade Git.Git
+        - generic [ref=e431]:
+          - button "▶ Node.js 安装教程" [ref=e432] [cursor=pointer]
+          - generic [ref=e433]:
+            - paragraph [ref=e434]: 先执行下面命令验证是否已安装，有版本号就可以跳过：
+            - generic [ref=e435]:
+              - generic [ref=e436]:
+                - generic [ref=e437]: PowerShell
+                - button "复制" [ref=e438] [cursor=pointer]
+              - code [ref=e440]: node --version npm --version
+            - generic [ref=e441]:
+              - button "▶ 方式一：官网下载（推荐）" [ref=e442] [cursor=pointer]
+              - paragraph [ref=e444]:
+                - text: 打开
+                - link "Node.js 官网" [ref=e445] [cursor=pointer]:
+                  - /url: https://nodejs.org/
+                - text: ，下载
+                - strong [ref=e446]: LTS
+                - text: 版本并安装。
+            - generic [ref=e447]:
+              - button "▶ 方式二：nvm-windows（多版本管理）" [ref=e448] [cursor=pointer]
+              - generic [ref=e449]:
+                - paragraph [ref=e450]:
+                  - text: 如果你经常切 Node 版本，用
+                  - code [ref=e451]: nvm-windows
+                  - text: 会省很多事。
+                - generic [ref=e452]:
+                  - link "GitHub Releases" [ref=e453] [cursor=pointer]:
+                    - /url: https://github.com/coreybutler/nvm-windows/releases
+                  - link "国内加速下载" [ref=e454] [cursor=pointer]:
+                    - /url: https://static.itssx.com/f/x7FY/nvm-setup.exe
+                  - link "Cloudflare 加速" [ref=e455] [cursor=pointer]:
+                    - /url: https://staticacc.itssx.com/f/x7FY/nvm-setup.exe
+                - generic [ref=e456]:
+                  - generic [ref=e457]:
+                    - generic [ref=e458]: PowerShell
+                    - button "复制" [ref=e459] [cursor=pointer]
+                  - code [ref=e461]: nvm install lts nvm use lts node --version npm --version
+            - generic [ref=e462]:
+              - button "▶ 方式三：包管理器安装" [ref=e463] [cursor=pointer]
+              - generic [ref=e465]:
+                - generic [ref=e466]:
+                  - generic [ref=e467]: PowerShell
+                  - button "复制" [ref=e468] [cursor=pointer]
+                - code [ref=e470]: "# Chocolatey choco install nodejs # Scoop scoop install nodejs"
+        - heading "2️⃣ 安装 OpenClaw" [level=3] [ref=e471]
+        - paragraph [ref=e472]: OpenClaw 官方当前要求 Node 22+。最省事的方式就是全局安装 CLI。
+        - generic [ref=e473]:
+          - generic [ref=e474]:
+            - generic [ref=e475]: Terminal
+            - button "复制" [ref=e476] [cursor=pointer]
+          - code [ref=e478]: "# 全局安装 npm install -g openclaw@latest # 国内镜像加速安装 npm install -g openclaw@latest --registry=https://registry.npmmirror.com # 验证安装 openclaw --version"
+        - heading "3️⃣ 运行初始化向导" [level=3] [ref=e479]
+        - paragraph [ref=e480]: 先跑初始化向导，把 Gateway 和基础配置铺出来。
+        - generic [ref=e481]:
+          - generic [ref=e482]:
+            - generic [ref=e483]: Terminal
+            - button "复制" [ref=e484] [cursor=pointer]
+          - code [ref=e486]: openclaw onboard --install-daemon
+        - paragraph [ref=e487]:
+          - text: ⚠️ 向导不同版本的文案可能不完全一致，遇到没有一模一样的选项就自己翻译理解一下对应含义处理；拿不准时，优先选择
+          - code [ref=e488]: Skip
+          - text: 、
+          - code [ref=e489]: Back
+          - text: 、
+          - code [ref=e490]: "No"
+          - text: 这类跳过项，先把基础 Gateway 跑起来再说。
+        - paragraph [ref=e491]: 向导里按下面这套选就行：
+        - table [ref=e492]:
+          - rowgroup [ref=e493]:
+            - row "选项 建议选择" [ref=e494]:
+              - columnheader "选项" [ref=e495]
+              - columnheader "建议选择" [ref=e496]
+            - row "Security 安全确认 Yes" [ref=e497]:
+              - cell "Security 安全确认" [ref=e498]
+              - cell "Yes" [ref=e499]:
+                - code [ref=e500]: "Yes"
+            - row "Onboarding mode Manual（手动配置）" [ref=e501]:
+              - cell "Onboarding mode" [ref=e502]
+              - cell "Manual（手动配置）" [ref=e503]:
+                - code [ref=e504]: Manual
+                - text: （手动配置）
+            - row "What do you want to set up? Local gateway (this machine)" [ref=e505]:
+              - cell "What do you want to set up?" [ref=e506]
+              - cell "Local gateway (this machine)" [ref=e507]:
+                - code [ref=e508]: Local gateway (this machine)
+            - row "Model / auth provider Skip for now 或 Back" [ref=e509]:
+              - cell "Model / auth provider" [ref=e510]
+              - cell "Skip for now 或 Back" [ref=e511]:
+                - code [ref=e512]: Skip for now
+                - text: 或
+                - code [ref=e513]: Back
+            - row "Gateway port 18789（默认）" [ref=e514]:
+              - cell "Gateway port" [ref=e515]
+              - cell "18789（默认）" [ref=e516]:
+                - code [ref=e517]: "18789"
+                - text: （默认）
+            - row "Gateway bind LAN (0.0.0.0)" [ref=e518]:
+              - cell "Gateway bind" [ref=e519]
+              - cell "LAN (0.0.0.0)" [ref=e520]:
+                - code [ref=e521]: LAN (0.0.0.0)
+            - row "Gateway auth Token" [ref=e522]:
+              - cell "Gateway auth" [ref=e523]
+              - cell "Token" [ref=e524]:
+                - code [ref=e525]: Token
+            - row "Tailscale exposure Off（除非你要远程访问）" [ref=e526]:
+              - cell "Tailscale exposure" [ref=e527]
+              - cell "Off（除非你要远程访问）" [ref=e528]:
+                - code [ref=e529]: "Off"
+                - text: （除非你要远程访问）
+            - row "Configure chat channels now? No" [ref=e530]:
+              - cell "Configure chat channels now?" [ref=e531]
+              - cell "No" [ref=e532]:
+                - code [ref=e533]: "No"
+            - row "Set GOOGLE_PLACES_API_KEY? No" [ref=e534]:
+              - cell "Set GOOGLE_PLACES_API_KEY?" [ref=e535]
+              - cell "No" [ref=e536]:
+                - code [ref=e537]: "No"
+            - row "Configure skills now? No 或 Skip for now" [ref=e538]:
+              - cell "Configure skills now?" [ref=e539]
+              - cell "No 或 Skip for now" [ref=e540]:
+                - code [ref=e541]: "No"
+                - text: 或
+                - code [ref=e542]: Skip for now
+        - generic [ref=e543]:
+          - text: 向导跑完如果提示
+          - code [ref=e544]: "Model check: No auth configured"
+          - text: ，这是正常的。因为你前面跳过了官方认证，后面手动接中转服务就行。
+        - heading "4️⃣ 配置中转服务" [level=3] [ref=e545]
+        - paragraph [ref=e546]: 编辑配置文件，添加自定义 provider。OpenClaw 默认配置目录在用户目录下：
+        - table [ref=e547]:
+          - rowgroup [ref=e548]:
+            - row "系统 配置文件路径" [ref=e549]:
+              - columnheader "系统" [ref=e550]
+              - columnheader "配置文件路径" [ref=e551]
+            - row "macOS / Linux ~/.openclaw/openclaw.json" [ref=e552]:
+              - cell "macOS / Linux" [ref=e553]
+              - cell "~/.openclaw/openclaw.json" [ref=e554]:
+                - code [ref=e555]: ~/.openclaw/openclaw.json
+            - row "Windows %USERPROFILE%\\\\.openclaw\\\\openclaw.json" [ref=e556]:
+              - cell "Windows" [ref=e557]
+              - cell "%USERPROFILE%\\\\.openclaw\\\\openclaw.json" [ref=e558]:
+                - code [ref=e559]: "%USERPROFILE%\\\\.openclaw\\\\openclaw.json"
+        - heading "可选分组" [level=4] [ref=e560]
+        - generic [ref=e561]:
+          - button "Claude" [ref=e562] [cursor=pointer]
+          - button "Gemini" [ref=e563] [cursor=pointer]
+          - button "Codex" [active] [ref=e564] [cursor=pointer]
+        - generic [ref=e565]:
+          - heading "⚠️ 配置重点提示" [level=3] [ref=e566]
+          - paragraph [ref=e567]: 如果在对应家的终端中可以使用，在龙虾中无法使用，那么就是配置有问题，仔细核对下面的配置信息。
+          - list [ref=e568]:
+            - listitem [ref=e569]:
+              - strong [ref=e570]: 先逐项对比配置：
+              - text: 用 AI 把你当前配置和下方示例一行行对比，找出差异。
+            - listitem [ref=e571]:
+              - strong [ref=e572]: 重点检查 4 个字段：
+              - code [ref=e573]: baseUrl
+              - text: 、
+              - code [ref=e574]: apiKey
+              - text: 、
+              - code [ref=e575]: model.primary
+              - text: 、
+              - code [ref=e576]: models
+              - text: 。
+            - listitem [ref=e577]:
+              - strong [ref=e578]:
+                - code [ref=e579]: baseUrl
+                - text: 必须对应你自己的分组地址：
+              - text: 不同分组 URL 不一样，不能乱套。
+            - listitem [ref=e580]:
+              - strong [ref=e581]:
+                - code [ref=e582]: model.primary
+                - text: 格式必须正确：
+              - text: 写成
+              - code [ref=e583]: provider/model-id
+              - text: 。
+            - listitem [ref=e584]:
+              - strong [ref=e585]:
+                - code [ref=e586]: models
+                - text: 里的模型列表要对上：
+              - text: 模型
+              - code [ref=e587]: id
+              - text: 、
+              - code [ref=e588]: api
+              - text: 类型、上下文参数都别写错。
+            - listitem [ref=e589]:
+              - strong [ref=e590]: 远程协助说明：
+              - text: 龙虾目前很忙，不进行远程配置；如果付费的话我也不介意。先自己核对下面的配置信息，写得很详细，不会就问 AI。
+        - paragraph [ref=e591]:
+          - text: 把下面这份完整配置覆盖到配置文件里，然后把
+          - code [ref=e592]: sk-xxx
+          - text: 换成你自己的密钥：
+        - paragraph [ref=e593]:
+          - text: 把
+          - code [ref=e594]: "\"auth\": { \"mode\": \"token\", \"token\": \"your-token\" }"
+          - text: 这里的
+          - code [ref=e595]: token
+          - text: 也替换成你自己的 token。
+        - generic [ref=e998]:
+          - generic [ref=e999]:
+            - generic [ref=e1000]: openclaw.json（Codex）
+            - button "复制" [ref=e1001] [cursor=pointer]
+          - code [ref=e1003]: "{ \"agents\": { \"defaults\": { \"workspace\": \"~/clawd\", \"model\": { \"primary\": \"forward-openai/gpt-5.4\" }, \"compaction\": { \"mode\": \"safeguard\", \"reserveTokensFloor\": 40000 }, \"thinkingDefault\": \"high\", \"timeoutSeconds\": 900, \"maxConcurrent\": 4, \"subagents\": { \"maxConcurrent\": 8 } } }, \"models\": { \"mode\": \"merge\", \"providers\": { \"forward-openai\": { \"apiKey\": \"sk-xxx\", \"baseUrl\": \"https://cc.sub.258000.sbs/v1\", \"api\": \"openai-responses\", \"models\": [ { \"contextWindow\": 400000, \"cost\": { \"cacheRead\": 0.175, \"cacheWrite\": 0, \"input\": 1.75, \"output\": 14 }, \"id\": \"gpt-5.4\", \"maxTokens\": 128000, \"name\": \"gpt-5.4\", \"reasoning\": true }, { \"contextWindow\": 272000, \"cost\": { \"cacheRead\": 0.25, \"cacheWrite\": 0, \"input\": 2.5, \"output\": 15 }, \"id\": \"gpt-5.3-codex\", \"maxTokens\": 128000, \"name\": \"gpt-5.3-codex\", \"reasoning\": true } ] } } }, \"messages\": { \"ackReactionScope\": \"group-mentions\" }, \"commands\": { \"native\": \"auto\", \"nativeSkills\": \"auto\" }, \"gateway\": { \"port\": 18789, \"mode\": \"local\", \"bind\": \"lan\", \"auth\": { \"mode\": \"token\", \"token\": \"your-token\" }, \"tailscale\": { \"mode\": \"off\", \"resetOnExit\": false } }, \"skills\": { \"install\": { \"nodeManager\": \"npm\" } } }"
+        - paragraph [ref=e604]:
+          - strong [ref=e605]: 补一句：
+          - text: 如果你把
+          - code [ref=e606]: gateway.bind
+          - text: 设成
+          - code [ref=e607]: lan
+          - text: ，建议一并加上
+          - code [ref=e608]: controlUi.allowedOrigins
+          - text: ，不然很容易撞上
+          - code [ref=e609]: non-loopback Control UI requires gateway.controlUi.allowedOrigins
+          - text: 这个破错误。
+        - heading "5️⃣ 验证配置" [level=3] [ref=e610]
+        - paragraph [ref=e611]: 别配完就发呆，先跑检查：
+        - generic [ref=e612]:
+          - generic [ref=e613]:
+            - generic [ref=e614]: Terminal
+            - button "复制" [ref=e615] [cursor=pointer]
+          - code [ref=e617]: "# 检查配置问题 openclaw doctor # 查看已配置的模型 openclaw models list"
+        - paragraph [ref=e618]:
+          - text: 如果
+          - code [ref=e619]: models list
+          - text: 里能看到你配的模型，而且
+          - code [ref=e620]: Auth
+          - text: 显示
+          - code [ref=e621]: "yes"
+          - text: ，说明配置成了。
+        - heading "6️⃣ 启动使用" [level=3] [ref=e622]
+        - generic [ref=e623]:
+          - generic [ref=e624]:
+            - generic [ref=e625]: Terminal
+            - button "复制" [ref=e626] [cursor=pointer]
+          - code [ref=e628]: "# 启动 Gateway 服务（后台运行） openclaw gateway install openclaw gateway start # 或前台运行（可看日志） openclaw gateway --verbose # PowerShell：设置 TUI Token $env:OPENCLAW_GATEWAY_TOKEN=\"your-token\" openclaw tui # 命令行直接对话 openclaw agent --agent main --message \"Hello\" # 调试技巧 openclaw doctor --fix openclaw gateway stop openclaw logs --follow"
+        - generic [ref=e629]:
+          - button "▶ 常用命令速查" [ref=e630] [cursor=pointer]
+          - generic [ref=e631]:
+            - heading "Gateway 管理" [level=4] [ref=e632]
+            - table [ref=e633]:
+              - rowgroup [ref=e634]:
+                - row "命令 说明" [ref=e635]:
+                  - columnheader "命令" [ref=e636]
+                  - columnheader "说明" [ref=e637]
+                - row "openclaw gateway 前台启动 Gateway" [ref=e638]:
+                  - cell "openclaw gateway" [ref=e639]:
+                    - code [ref=e640]: openclaw gateway
+                  - cell "前台启动 Gateway" [ref=e641]
+                - row "openclaw gateway --verbose 前台启动并显示详细日志" [ref=e642]:
+                  - cell "openclaw gateway --verbose" [ref=e643]:
+                    - code [ref=e644]: openclaw gateway --verbose
+                  - cell "前台启动并显示详细日志" [ref=e645]
+                - row "openclaw gateway install 安装 Gateway 后台服务" [ref=e646]:
+                  - cell "openclaw gateway install" [ref=e647]:
+                    - code [ref=e648]: openclaw gateway install
+                  - cell "安装 Gateway 后台服务" [ref=e649]
+                - row "openclaw gateway start 启动后台服务" [ref=e650]:
+                  - cell "openclaw gateway start" [ref=e651]:
+                    - code [ref=e652]: openclaw gateway start
+                  - cell "启动后台服务" [ref=e653]
+                - row "openclaw gateway stop 停止后台服务" [ref=e654]:
+                  - cell "openclaw gateway stop" [ref=e655]:
+                    - code [ref=e656]: openclaw gateway stop
+                  - cell "停止后台服务" [ref=e657]
+                - row "openclaw gateway restart 重启 Gateway" [ref=e658]:
+                  - cell "openclaw gateway restart" [ref=e659]:
+                    - code [ref=e660]: openclaw gateway restart
+                  - cell "重启 Gateway" [ref=e661]
+                - row "openclaw gateway status 查看运行状态" [ref=e662]:
+                  - cell "openclaw gateway status" [ref=e663]:
+                    - code [ref=e664]: openclaw gateway status
+                  - cell "查看运行状态" [ref=e665]
+                - row "openclaw gateway health Gateway 健康检查" [ref=e666]:
+                  - cell "openclaw gateway health" [ref=e667]:
+                    - code [ref=e668]: openclaw gateway health
+                  - cell "Gateway 健康检查" [ref=e669]
+                - row "openclaw gateway uninstall 卸载 Gateway 后台服务" [ref=e670]:
+                  - cell "openclaw gateway uninstall" [ref=e671]:
+                    - code [ref=e672]: openclaw gateway uninstall
+                  - cell "卸载 Gateway 后台服务" [ref=e673]
+            - heading "状态与诊断" [level=4] [ref=e674]
+            - table [ref=e675]:
+              - rowgroup [ref=e676]:
+                - row "命令 说明" [ref=e677]:
+                  - columnheader "命令" [ref=e678]
+                  - columnheader "说明" [ref=e679]
+                - row "openclaw status 快速状态总览" [ref=e680]:
+                  - cell "openclaw status" [ref=e681]:
+                    - code [ref=e682]: openclaw status
+                  - cell "快速状态总览" [ref=e683]
+                - row "openclaw status --all 完整诊断报告" [ref=e684]:
+                  - cell "openclaw status --all" [ref=e685]:
+                    - code [ref=e686]: openclaw status --all
+                  - cell "完整诊断报告" [ref=e687]
+                - row "openclaw doctor 检查配置问题" [ref=e688]:
+                  - cell "openclaw doctor" [ref=e689]:
+                    - code [ref=e690]: openclaw doctor
+                  - cell "检查配置问题" [ref=e691]
+                - row "openclaw doctor --fix 自动修复配置问题" [ref=e692]:
+                  - cell "openclaw doctor --fix" [ref=e693]:
+                    - code [ref=e694]: openclaw doctor --fix
+                  - cell "自动修复配置问题" [ref=e695]
+                - row "openclaw models list 查看可用模型" [ref=e696]:
+                  - cell "openclaw models list" [ref=e697]:
+                    - code [ref=e698]: openclaw models list
+                  - cell "查看可用模型" [ref=e699]
+                - row "openclaw models set <model> 切换默认模型" [ref=e700]:
+                  - cell "openclaw models set <model>" [ref=e701]:
+                    - code [ref=e702]: openclaw models set <model>
+                  - cell "切换默认模型" [ref=e703]
+                - row "openclaw configure 重新进入交互式配置向导" [ref=e704]:
+                  - cell "openclaw configure" [ref=e705]:
+                    - code [ref=e706]: openclaw configure
+                  - cell "重新进入交互式配置向导" [ref=e707]
+            - heading "渠道、插件、代理" [level=4] [ref=e708]
+            - table [ref=e709]:
+              - rowgroup [ref=e710]:
+                - row "命令 说明" [ref=e711]:
+                  - columnheader "命令" [ref=e712]
+                  - columnheader "说明" [ref=e713]
+                - row "openclaw channels list 列出已配置渠道" [ref=e714]:
+                  - cell "openclaw channels list" [ref=e715]:
+                    - code [ref=e716]: openclaw channels list
+                  - cell "列出已配置渠道" [ref=e717]
+                - row "openclaw channels status 检查渠道连接状态" [ref=e718]:
+                  - cell "openclaw channels status" [ref=e719]:
+                    - code [ref=e720]: openclaw channels status
+                  - cell "检查渠道连接状态" [ref=e721]
+                - row "openclaw channels add 添加新渠道" [ref=e722]:
+                  - cell "openclaw channels add" [ref=e723]:
+                    - code [ref=e724]: openclaw channels add
+                  - cell "添加新渠道" [ref=e725]
+                - row "openclaw channels remove 移除渠道" [ref=e726]:
+                  - cell "openclaw channels remove" [ref=e727]:
+                    - code [ref=e728]: openclaw channels remove
+                  - cell "移除渠道" [ref=e729]
+                - row "openclaw channels login 登录渠道账号" [ref=e730]:
+                  - cell "openclaw channels login" [ref=e731]:
+                    - code [ref=e732]: openclaw channels login
+                  - cell "登录渠道账号" [ref=e733]
+                - row "openclaw plugins enable <id> 启用指定插件" [ref=e734]:
+                  - cell "openclaw plugins enable <id>" [ref=e735]:
+                    - code [ref=e736]: openclaw plugins enable <id>
+                  - cell "启用指定插件" [ref=e737]
+                - row "openclaw plugins list 列出插件" [ref=e738]:
+                  - cell "openclaw plugins list" [ref=e739]:
+                    - code [ref=e740]: openclaw plugins list
+                  - cell "列出插件" [ref=e741]
+                - row "openclaw plugins info <id> 查看插件详情" [ref=e742]:
+                  - cell "openclaw plugins info <id>" [ref=e743]:
+                    - code [ref=e744]: openclaw plugins info <id>
+                  - cell "查看插件详情" [ref=e745]
+                - row "openclaw plugins disable <id> 禁用插件" [ref=e746]:
+                  - cell "openclaw plugins disable <id>" [ref=e747]:
+                    - code [ref=e748]: openclaw plugins disable <id>
+                  - cell "禁用插件" [ref=e749]
+                - row "openclaw plugins doctor 插件诊断与修复" [ref=e750]:
+                  - cell "openclaw plugins doctor" [ref=e751]:
+                    - code [ref=e752]: openclaw plugins doctor
+                  - cell "插件诊断与修复" [ref=e753]
+                - row "openclaw agents list 查看代理" [ref=e754]:
+                  - cell "openclaw agents list" [ref=e755]:
+                    - code [ref=e756]: openclaw agents list
+                  - cell "查看代理" [ref=e757]
+                - row "openclaw agents add [name] 添加新代理" [ref=e758]:
+                  - cell "openclaw agents add [name]" [ref=e759]:
+                    - code [ref=e760]: openclaw agents add [name]
+                  - cell "添加新代理" [ref=e761]
+                - row "openclaw sessions 查看活跃会话" [ref=e762]:
+                  - cell "openclaw sessions" [ref=e763]:
+                    - code [ref=e764]: openclaw sessions
+                  - cell "查看活跃会话" [ref=e765]
+                - row "openclaw tui 启动 TUI 交互界面" [ref=e766]:
+                  - cell "openclaw tui" [ref=e767]:
+                    - code [ref=e768]: openclaw tui
+                  - cell "启动 TUI 交互界面" [ref=e769]
+            - heading "系统管理" [level=4] [ref=e770]
+            - table [ref=e771]:
+              - rowgroup [ref=e772]:
+                - row "命令 说明" [ref=e773]:
+                  - columnheader "命令" [ref=e774]
+                  - columnheader "说明" [ref=e775]
+                - row "openclaw cron list 列出所有定时任务" [ref=e776]:
+                  - cell "openclaw cron list" [ref=e777]:
+                    - code [ref=e778]: openclaw cron list
+                  - cell "列出所有定时任务" [ref=e779]
+                - row "openclaw cron add 添加定时任务" [ref=e780]:
+                  - cell "openclaw cron add" [ref=e781]:
+                    - code [ref=e782]: openclaw cron add
+                  - cell "添加定时任务" [ref=e783]
+                - row "openclaw update 更新 OpenClaw" [ref=e784]:
+                  - cell "openclaw update" [ref=e785]:
+                    - code [ref=e786]: openclaw update
+                  - cell "更新 OpenClaw" [ref=e787]
+                - row "openclaw dashboard 打开 Web 管理面板" [ref=e788]:
+                  - cell "openclaw dashboard" [ref=e789]:
+                    - code [ref=e790]: openclaw dashboard
+                  - cell "打开 Web 管理面板" [ref=e791]
+                - row "openclaw memory search <query> 语义搜索记忆库" [ref=e792]:
+                  - cell "openclaw memory search <query>" [ref=e793]:
+                    - code [ref=e794]: openclaw memory search <query>
+                  - cell "语义搜索记忆库" [ref=e795]
+                - row "openclaw daemon install 安装后台服务（开机自启）" [ref=e796]:
+                  - cell "openclaw daemon install" [ref=e797]:
+                    - code [ref=e798]: openclaw daemon install
+                  - cell "安装后台服务（开机自启）" [ref=e799]
+                - row "openclaw daemon uninstall 卸载后台服务" [ref=e800]:
+                  - cell "openclaw daemon uninstall" [ref=e801]:
+                    - code [ref=e802]: openclaw daemon uninstall
+                  - cell "卸载后台服务" [ref=e803]
+                - row "openclaw reset 重置本地配置" [ref=e804]:
+                  - cell "openclaw reset" [ref=e805]:
+                    - code [ref=e806]: openclaw reset
+                  - cell "重置本地配置" [ref=e807]
+                - row "openclaw uninstall 完全卸载 OpenClaw" [ref=e808]:
+                  - cell "openclaw uninstall" [ref=e809]:
+                    - code [ref=e810]: openclaw uninstall
+                  - cell "完全卸载 OpenClaw" [ref=e811]
+        - generic [ref=e812]:
+          - button "▶ 进阶配置：多 Provider / Dashboard / 日志 / 备份 / 端口 / Tailscale" [ref=e813] [cursor=pointer]
+          - generic [ref=e814]:
+            - heading "配置改完要重启" [level=4] [ref=e815]
+            - generic [ref=e816]:
+              - generic [ref=e817]:
+                - generic [ref=e818]: Terminal
+                - button "复制" [ref=e819] [cursor=pointer]
+              - code [ref=e821]: openclaw gateway restart
+            - heading "升级流程" [level=4] [ref=e822]
+            - generic [ref=e823]:
+              - generic [ref=e824]:
+                - generic [ref=e825]: Terminal
+                - button "复制" [ref=e826] [cursor=pointer]
+              - code [ref=e828]: npm install -g openclaw@latest npm install -g openclaw@latest --registry=https://registry.npmmirror.com openclaw gateway restart
+            - heading "多 Provider 配置" [level=4] [ref=e829]
+            - paragraph [ref=e830]: 你可以在同一个配置文件里挂多个 provider，然后切默认模型。
+            - generic [ref=e831]:
+              - generic [ref=e832]:
+                - generic [ref=e833]: openclaw.json
+                - button "复制" [ref=e834] [cursor=pointer]
+              - code [ref=e836]: "\"providers\": { \"nexus\": { \"baseUrl\": \"https://...\", \"apiKey\": \"sk-xxx\", \"api\": \"anthropic-messages\", \"models\": [...] }, \"nexus_codex\": { \"baseUrl\": \"https://...\", \"apiKey\": \"sk-xxx\", \"api\": \"openai-responses\", \"models\": [...] } } openclaw models set nexus/claude-opus-4-6 openclaw models set nexus_codex/gpt-5.4 openclaw models list"
+            - heading "Web Dashboard" [level=4] [ref=e837]
+            - generic [ref=e838]:
+              - generic [ref=e839]:
+                - generic [ref=e840]: Terminal
+                - button "复制" [ref=e841] [cursor=pointer]
+              - code [ref=e843]: openclaw dashboard http://localhost:18789
+            - paragraph [ref=e844]:
+              - text: Dashboard 需要 Gateway 正在运行，访问时输入和
+              - code [ref=e845]: gateway.auth.token
+              - text: 一致的 Token。
+            - heading "日志文件" [level=4] [ref=e846]
+            - generic [ref=e847]:
+              - generic [ref=e848]:
+                - generic [ref=e849]: Terminal
+                - button "复制" [ref=e850] [cursor=pointer]
+              - code [ref=e852]: "# 通用 openclaw logs --follow openclaw logs # 直接看日志文件 tail -f ~/.openclaw/logs/gateway.log"
+            - paragraph [ref=e853]:
+              - strong [ref=e854]: Windows 路径：
+              - code [ref=e855]: "%USERPROFILE%\\\\.openclaw\\\\logs\\\\gateway.log"
+            - heading "配置备份与恢复" [level=4] [ref=e856]
+            - generic [ref=e857]:
+              - generic [ref=e858]:
+                - generic [ref=e859]: PowerShell / Shell
+                - button "复制" [ref=e860] [cursor=pointer]
+              - code [ref=e862]: "# macOS / Linux 备份 cp -r ~/.openclaw ~/.openclaw.bak # Windows PowerShell 备份 Copy-Item -Recurse $env:USERPROFILE\\.openclaw $env:USERPROFILE\\.openclaw.bak # macOS / Linux 恢复 rm -rf ~/.openclaw && cp -r ~/.openclaw.bak ~/.openclaw # Windows PowerShell 恢复 Remove-Item -Recurse -Force $env:USERPROFILE\\.openclaw; Copy-Item -Recurse $env:USERPROFILE\\.openclaw.bak $env:USERPROFILE\\.openclaw"
+            - heading "端口冲突处理" [level=4] [ref=e863]
+            - generic [ref=e864]:
+              - generic [ref=e865]:
+                - generic [ref=e866]: PowerShell / Shell
+                - button "复制" [ref=e867] [cursor=pointer]
+              - code [ref=e869]: "# macOS / Linux lsof -i :18789 # Windows netstat -ano | findstr 18789 # 修改配置后重启 openclaw gateway restart"
+            - heading "Tailscale 远程访问" [level=4] [ref=e870]
+            - generic [ref=e871]:
+              - generic [ref=e872]:
+                - generic [ref=e873]: openclaw.json
+                - button "复制" [ref=e874] [cursor=pointer]
+              - code [ref=e876]: "\"gateway\": { \"bind\": \"loopback\", \"tailscale\": { \"mode\": \"serve\", \"resetOnExit\": false } } openclaw gateway restart https://<tailscale-dns-name>"
+            - heading "安全建议" [level=4] [ref=e877]
+            - list [ref=e878]:
+              - listitem [ref=e879]: ✓ 使用强随机值作为 Gateway Token，不要拿简单密码充数。
+              - listitem [ref=e880]: ✓ 不要把 API Key 提交到 Git 仓库，也别随便发给别人。
+              - listitem [ref=e881]:
+                - text: ✓ 如果不需要局域网访问，把
+                - code [ref=e882]: gateway.bind
+                - text: 设为
+                - code [ref=e883]: loopback
+                - text: 。
+              - listitem [ref=e884]: ✓ 要远程访问优先用 Tailscale，别直接暴露端口到公网。
+            - generic [ref=e885]:
+              - generic [ref=e886]:
+                - generic [ref=e887]: Terminal
+                - button "复制" [ref=e888] [cursor=pointer]
+              - code [ref=e890]: openssl rand -hex 32
+        - generic [ref=e891]:
+          - button "▶ 工具配置：Web Search / Memory Search / Web Fetch" [ref=e892] [cursor=pointer]
+          - generic [ref=e893]:
+            - heading "Web Search" [level=4] [ref=e894]
+            - paragraph [ref=e895]: 网页搜索默认使用 Google Gemini Grounding，不能直接走普通中转。你得自己准备一个真实的 Google API Key。
+            - generic [ref=e896]:
+              - generic [ref=e897]:
+                - generic [ref=e898]: PowerShell
+                - button "复制" [ref=e899] [cursor=pointer]
+              - code [ref=e901]: "[System.Environment]::SetEnvironmentVariable(\"GEMINI_API_KEY\", \"your-google-api-key\", [System.EnvironmentVariableTarget]::Machine)"
+            - generic [ref=e902]:
+              - generic [ref=e903]:
+                - generic [ref=e904]: openclaw.json
+                - button "复制" [ref=e905] [cursor=pointer]
+              - code [ref=e907]: "\"tools\": { \"web\": { \"search\": { \"provider\": \"gemini\", \"gemini\": { \"apiKey\": \"your-google-api-key\" } } } }"
+            - heading "Memory Search" [level=4] [ref=e908]
+            - paragraph [ref=e909]: 记忆系统需要 embedding 模型，支持走中转，也可以直连 Gemini。
+            - generic [ref=e910]:
+              - generic [ref=e911]:
+                - generic [ref=e912]: openclaw.json
+                - button "复制" [ref=e913] [cursor=pointer]
+              - code [ref=e915]: "\"agents\": { \"defaults\": { \"memorySearch\": { \"provider\": \"gemini\", \"remote\": { \"baseUrl\": \"https://nexusacc.itssx.com/api/gemini/gemini_api2/v1beta\", \"apiKey\": \"sk-xxx\" } } } }"
+            - heading "Web Fetch" [level=4] [ref=e916]
+            - paragraph [ref=e917]: 网页抓取是内置能力，默认不用额外 Key。目标网站太狗拦请求时，可以再单独补 Firecrawl 作为 fallback。
+        - generic [ref=e918]:
+          - button "▶ 常见配置问题、故障排查与 Telegram 接入" [ref=e919] [cursor=pointer]
+          - generic [ref=e920]:
+            - heading "常见配置问题" [level=4] [ref=e921]
+            - list [ref=e922]:
+              - listitem [ref=e923]:
+                - text: ✓
+                - strong [ref=e924]: baseUrl 末尾别带斜杠：
+                - code [ref=e925]: https://xxx.itssx.com/api
+                - text: 才是常见正确写法。
+              - listitem [ref=e926]:
+                - text: ✓
+                - strong [ref=e927]: gateway.mode 必须有：
+                - text: 不配会报
+                - code [ref=e928]: Gateway start blocked
+                - text: 。
+              - listitem [ref=e929]:
+                - text: ✓
+                - strong [ref=e930]: model.primary 必须带 provider 前缀：
+                - code [ref=e931]: nexus/claude-opus-4-6
+                - text: 。
+              - listitem [ref=e932]:
+                - text: ✓
+                - strong [ref=e933]: bind = lan 时要补 allowedOrigins：
+                - text: 不然 Control UI 会直接罢工。
+            - generic [ref=e934]:
+              - generic [ref=e935]:
+                - generic [ref=e936]: Terminal
+                - button "复制" [ref=e937] [cursor=pointer]
+              - code [ref=e939]: openclaw doctor openclaw doctor --fix openclaw models status openclaw logs --follow
+            - table [ref=e940]:
+              - rowgroup [ref=e941]:
+                - row "错误信息 解决方案" [ref=e942]:
+                  - columnheader "错误信息" [ref=e943]
+                  - columnheader "解决方案" [ref=e944]
+                - row "No API key found 检查 apiKey 是否正确填写。" [ref=e945]:
+                  - cell "No API key found" [ref=e946]:
+                    - code [ref=e947]: No API key found
+                  - cell "检查 apiKey 是否正确填写。" [ref=e948]:
+                    - text: 检查
+                    - code [ref=e949]: apiKey
+                    - text: 是否正确填写。
+                - 'row "Gateway start blocked 在 gateway 中加上 mode: \"local\"。" [ref=e950]':
+                  - cell "Gateway start blocked" [ref=e951]:
+                    - code [ref=e952]: Gateway start blocked
+                  - 'cell "在 gateway 中加上 mode: \"local\"。" [ref=e953]':
+                    - text: 在
+                    - code [ref=e954]: gateway
+                    - text: 中加上
+                    - code [ref=e955]: "mode: \"local\""
+                    - text: 。
+                - row "non-loopback Control UI requires gateway.controlUi.allowedOrigins 补上 controlUi.allowedOrigins。" [ref=e956]:
+                  - cell "non-loopback Control UI requires gateway.controlUi.allowedOrigins" [ref=e957]:
+                    - code [ref=e958]: non-loopback Control UI requires gateway.controlUi.allowedOrigins
+                  - cell "补上 controlUi.allowedOrigins。" [ref=e959]:
+                    - text: 补上
+                    - code [ref=e960]: controlUi.allowedOrigins
+                    - text: 。
+                - row "Connection refused 检查 baseUrl 和网络连接。" [ref=e961]:
+                  - cell "Connection refused" [ref=e962]:
+                    - code [ref=e963]: Connection refused
+                  - cell "检查 baseUrl 和网络连接。" [ref=e964]:
+                    - text: 检查
+                    - code [ref=e965]: baseUrl
+                    - text: 和网络连接。
+                - row "401 Unauthorized 检查 API Key 是否正确。" [ref=e966]:
+                  - cell "401 Unauthorized" [ref=e967]:
+                    - code [ref=e968]: 401 Unauthorized
+                  - cell "检查 API Key 是否正确。" [ref=e969]
+                - row "404 Not Found 检查 baseUrl 路径是否正确。" [ref=e970]:
+                  - cell "404 Not Found" [ref=e971]:
+                    - code [ref=e972]: 404 Not Found
+                  - cell "检查 baseUrl 路径是否正确。" [ref=e973]:
+                    - text: 检查
+                    - code [ref=e974]: baseUrl
+                    - text: 路径是否正确。
+            - heading "配置 Telegram" [level=4] [ref=e975]
+            - list [ref=e976]:
+              - listitem [ref=e977]:
+                - text: 在 Telegram 搜索
+                - code [ref=e978]: "@BotFather"
+                - text: 。
+              - listitem [ref=e979]:
+                - text: 发送
+                - code [ref=e980]: /newbot
+                - text: 创建机器人。
+              - listitem [ref=e981]:
+                - text: 保存返回的 Bot Token（类似
+                - code [ref=e982]: 123456789:ABC...
+                - text: ）。
+            - generic [ref=e983]:
+              - generic [ref=e984]:
+                - generic [ref=e985]: Terminal
+                - button "复制" [ref=e986] [cursor=pointer]
+              - code [ref=e988]: "# 启用 Telegram 插件 openclaw plugins enable telegram # 写入 Bot Token openclaw config set channels.telegram.botToken \"YOUR_BOT_TOKEN\" # 启动 Gateway openclaw gateway # 如果前面起过服务，先停掉再拉起 openclaw gateway stop openclaw gateway"
+            - paragraph [ref=e989]: 然后在 Telegram 里给你的 bot 发消息，收到验证码后执行：
+            - generic [ref=e990]:
+              - generic [ref=e991]:
+                - generic [ref=e992]: Terminal
+                - button "复制" [ref=e993] [cursor=pointer]
+              - code [ref=e995]: openclaw pairing approve telegram YOUR_CODE
+            - paragraph [ref=e996]: 配对完成后，就能直接在 Telegram 里和 OpenClaw 对话了。
+      - text: ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ▶ ▶ ✓ ✓ ✓ ✓ ▶ ▶ ✓ ✓ ✓ ✓ ▶ ▶

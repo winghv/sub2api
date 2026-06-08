@@ -1,0 +1,87 @@
+# Sub2API 简化配置 (Docker + Cloudflare Tunnel 使用)
+# 路径: ./config.yaml (挂载到容器 /app/config.yaml)
+
+server:
+  mode: "release"
+  port: 8080
+  admin_port: 3030
+  read_timeout: 120s
+  write_timeout: 120s
+  debug: false
+
+database:
+  host: "postgres"
+  port: 5432
+  name: "sub2api"
+  user: "sub2api"
+  password: "${POSTGRES_PASSWORD}"
+  max_open_conns: 50
+  max_idle_conns: 10
+  conn_max_lifetime_minutes: 30
+
+redis:
+  host: "redis"
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 256
+  min_idle_conns: 16
+  tls_enabled: false
+
+auth:
+  api_key_required: true
+  admin_key_required: true
+  api_key_prefix: "sk-"
+  api_key_cache_ttl_seconds: 300
+
+log:
+  level: "info"
+  format: "json"
+  service_name: "sub2api"
+  env: "production"
+  caller: true
+  stacktrace_level: "error"
+  output:
+    to_stdout: true
+    to_file: false
+  rotation:
+    max_size_mb: 100
+    max_backups: 7
+    max_age_days: 7
+    compress: true
+    local_time: true
+
+gateway:
+  max_idle_conns: 2560
+  max_idle_conns_per_host: 120
+  max_conns_per_host: 1024
+  idle_conn_timeout_seconds: 90
+  max_upstream_clients: 5000
+  client_idle_ttl_seconds: 900
+
+h2c:
+  enabled: true
+  max_concurrent_streams: 50
+  idle_timeout: 75s
+  max_read_frame_size: 1048576
+
+scheduling:
+  sticky_session_max_waiting: 3
+  sticky_session_wait_timeout: 120s
+  fallback_max_waiting: 100
+  fallback_wait_timeout: 30s
+
+openai_ws:
+  max_conns_per_account: 128
+  min_idle_per_account: 4
+  max_idle_per_account: 12
+  dial_timeout_seconds: 10
+  read_timeout_seconds: 900
+  write_timeout_seconds: 120
+
+usage_record_worker:
+  worker_count: 128
+  queue_size: 16384
+  auto_scale: true
+  auto_scale_min_workers: 128
+  auto_scale_max_workers: 512

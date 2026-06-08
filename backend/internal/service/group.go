@@ -8,6 +8,7 @@ import (
 )
 
 type OpenAIMessagesDispatchModelConfig = domain.OpenAIMessagesDispatchModelConfig
+type GroupModelsListConfig = domain.GroupModelsListConfig
 
 type Group struct {
 	ID             int64
@@ -26,9 +27,12 @@ type Group struct {
 	DefaultValidityDays int
 
 	// 图片生成计费配置（antigravity 和 gemini 平台使用）
-	ImagePrice1K *float64
-	ImagePrice2K *float64
-	ImagePrice4K *float64
+	AllowImageGeneration bool
+	ImageRateIndependent bool
+	ImageRateMultiplier  float64
+	ImagePrice1K         *float64
+	ImagePrice2K         *float64
+	ImagePrice4K         *float64
 
 	// Claude Code 客户端限制
 	ClaudeCodeOnly  bool
@@ -45,6 +49,9 @@ type Group struct {
 	// MCP XML 协议注入开关（仅 antigravity 平台使用）
 	MCPXMLInject bool
 
+	// Claude usage 模拟开关：将无写缓存 usage 模拟为 claude-max 风格
+	SimulateClaudeMaxEnabled bool
+
 	// 支持的模型系列（仅 antigravity 平台使用）
 	// 可选值: claude, gemini_text, gemini_image
 	SupportedModelScopes []string
@@ -58,6 +65,11 @@ type Group struct {
 	RequirePrivacySet           bool // 调度时仅允许 privacy 已成功设置的账号（OpenAI/Antigravity/Anthropic/Gemini）
 	DefaultMappedModel          string
 	MessagesDispatchModelConfig OpenAIMessagesDispatchModelConfig
+	ModelsListConfig            GroupModelsListConfig
+
+	// RPMLimit 分组级每分钟请求数上限（0 = 不限制）。
+	// 一旦设置即接管该分组用户的限流（覆盖用户级 rpm_limit），可被 user-group rpm_override 进一步覆盖。
+	RPMLimit int
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
