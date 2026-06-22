@@ -85,3 +85,12 @@ usage_record_worker:
   auto_scale: true
   auto_scale_min_workers: 128
   auto_scale_max_workers: 512
+
+# 按来源国家限制【平台】访问（前端页面 + /api/v1）。API 网关流量始终放行。
+# Cloudflare 部署下 CF-IPCountry 由边缘自动注入，开箱即用。
+security:
+  geo_block:
+    enabled: false
+    # 中国大陆 = CN（香港/澳门/台湾为 HK/MO/TW）。设为 ["CN"] 即封锁中国大陆平台访问。
+    blocked_countries: []
+    country_header: "CF-IPCountry"
