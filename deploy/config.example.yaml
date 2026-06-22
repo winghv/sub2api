@@ -140,6 +140,24 @@ security:
     # 辅助服务（更新检查、定价数据拉取）代理初始化失败时是否允许回退直连。
     # 不影响 AI 账号网关连接。默认 false：fail-fast 防止 IP 泄露。
     allow_direct_on_error: false
+  geo_block:
+    # Restrict PLATFORM access (frontend pages + /api/v1 auth/admin/payment) by
+    # client country. API gateway traffic (/v1, /v1beta, /responses, ...) is always allowed.
+    # 按来源国家限制【平台】访问（前端页面 + /api/v1 认证/管理/支付接口）。
+    # API 网关流量（/v1、/v1beta、/responses 等）始终放行，不受影响。
+    enabled: false
+    # ISO 3166-1 alpha-2 country codes to block (case-insensitive).
+    # CN = mainland China. HK/MO/TW are separate codes.
+    # 被封锁的 ISO 两字母国家码（大小写不敏感）。CN = 中国大陆；香港/澳门/台湾分别为 HK/MO/TW。
+    blocked_countries: []
+    # Header carrying the client country code. Default CF-IPCountry (injected by Cloudflare).
+    # 读取国家码的 Header。默认 CF-IPCountry（由 Cloudflare 边缘自动注入）。
+    # NOTE: enforcement depends on the CDN injecting this header. Requests that bypass
+    # Cloudflare and hit the origin directly carry no header and are allowed (fail-open);
+    # to fully block, restrict the origin firewall to Cloudflare IP ranges.
+    # 注意：强制依赖 CDN 注入此 Header。绕过 Cloudflare 直连源站的请求无此头、按 fail-open 放行；
+    # 彻底封堵需在源站防火墙仅放行 Cloudflare 回源 IP 段。
+    country_header: "CF-IPCountry"
 
 # =============================================================================
 # Gateway Configuration

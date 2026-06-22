@@ -581,6 +581,25 @@ type SecurityConfig struct {
 	ProxyProbe                       ProxyProbeConfig     `mapstructure:"proxy_probe"`
 	TrustForwardedIPForAPIKeyACL     bool                 `mapstructure:"trust_forwarded_ip_for_api_key_acl"`
 	trustForwardedIPForAPIKeyACLLive *atomic.Bool         `mapstructure:"-"`
+	GeoBlock                         GeoBlockConfig       `mapstructure:"geo_block"`
+}
+
+// GeoBlockConfig 控制按来源国家/地区限制平台（前端 + /api/v1）访问。
+// 仅限制平台访问，API 网关流量（/v1、/v1beta、/responses 等）始终放行。
+//
+// 国家码来源依赖 CDN/反代注入的 Header（默认 Cloudflare 的 CF-IPCountry，
+// 值为 2 字母 ISO 国家码）。中国大陆 = "CN"，香港/澳门/台湾分别为 HK/MO/TW。
+//
+// 已知限制：真正的强制依赖 Cloudflare 边缘注入 CountryHeader。若请求绕过
+// Cloudflare 直连源站，则无此 Header，按 fail-open 放行。彻底封堵需在源站
+// 防火墙仅放行 Cloudflare 回源 IP 段（运维层）。
+type GeoBlockConfig struct {
+	// Enabled 地区封锁总开关（默认 false）。
+	Enabled bool `mapstructure:"enabled"`
+	// BlockedCountries 被封锁的 ISO 3166-1 alpha-2 国家码列表（大小写不敏感），如 ["CN"]。
+	BlockedCountries []string `mapstructure:"blocked_countries"`
+	// CountryHeader 读取国家码的 Header 名（默认 "CF-IPCountry"）。
+	CountryHeader string `mapstructure:"country_header"`
 }
 
 func (c *Config) TrustForwardedIPForAPIKeyACL() bool {
@@ -1561,6 +1580,11 @@ func setDefaults() {
 	viper.SetDefault("security.csp.policy", DefaultCSPPolicy)
 	viper.SetDefault("security.proxy_probe.insecure_skip_verify", false)
 	viper.SetDefault("security.trust_forwarded_ip_for_api_key_acl", false)
+
+	// Security - geo block (按来源国家限制平台访问，默认关闭)
+	viper.SetDefault("security.geo_block.enabled", false)
+	viper.SetDefault("security.geo_block.blocked_countries", []string{})
+	viper.SetDefault("security.geo_block.country_header", "CF-IPCountry")
 
 	// Security - disable direct fallback on proxy error
 	viper.SetDefault("security.proxy_fallback.allow_direct_on_error", false)

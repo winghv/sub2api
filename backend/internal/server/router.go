@@ -61,6 +61,10 @@ func SetupRouter(
 		return nil
 	}))
 
+	// 按来源国家/地区限制平台访问（API 网关流量不受影响）。
+	// 必须在前端服务中间件之前，确保被封地区拿不到 SPA 页面。
+	r.Use(middleware2.GeoBlock(cfg.Security.GeoBlock))
+
 	// Serve embedded frontend with settings injection if available
 	if web.HasEmbeddedFrontend() {
 		frontendServer, err := web.NewFrontendServer(settingService)
