@@ -29,12 +29,23 @@ var geoBlockAPIExact = map[string]struct{}{
 	"/embeddings":              {},
 }
 
-// isGeoBlockExemptPath 判断路径是否属于 API 网关流量（不受地区封锁影响）。
+// geoBlockWebhookPrefixes 是支付回调路径前缀，必须无条件放行。
+// 支付商服务器主动回调，来源 IP 与用户无关，不能被地区封锁拦截。
+var geoBlockWebhookPrefixes = []string{
+	"/api/v1/payment/webhook/",
+}
+
+// isGeoBlockExemptPath 判断路径是否豁免地区封锁。
 func isGeoBlockExemptPath(path string) bool {
 	if _, ok := geoBlockAPIExact[path]; ok {
 		return true
 	}
 	for _, p := range geoBlockAPIPrefixes {
+		if strings.HasPrefix(path, p) {
+			return true
+		}
+	}
+	for _, p := range geoBlockWebhookPrefixes {
 		if strings.HasPrefix(path, p) {
 			return true
 		}

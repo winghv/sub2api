@@ -157,6 +157,22 @@ func TestGeoBlock_JSONResponseForNonBrowser(t *testing.T) {
 	require.False(t, strings.Contains(w.Body.String(), "<!DOCTYPE"))
 }
 
+func TestGeoBlock_PaymentWebhookBypass(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	r := gin.New()
+	r.Use(GeoBlock(config.GeoBlockConfig{Enabled: true, BlockedCountries: []string{"CN"}}))
+	r.POST("/api/v1/payment/webhook/easypay", func(c *gin.Context) { c.String(http.StatusOK, "ok") })
+	r.POST("/api/v1/payment/webhook/alipay", func(c *gin.Context) { c.String(http.StatusOK, "ok") })
+
+	for _, path := range []string{"/api/v1/payment/webhook/easypay", "/api/v1/payment/webhook/alipay"} {
+		req := httptest.NewRequest(http.MethodPost, path, nil)
+		req.Header.Set("CF-IPCountry", "CN")
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+		require.Equalf(t, http.StatusOK, w.Code, "payment webhook %s must bypass geo-block", path)
+	}
+}
+
 func TestGeoBlock_CustomHeader(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
