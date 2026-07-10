@@ -24,6 +24,8 @@ func newGeoBlockRouter(cfg config.GeoBlockConfig) *gin.Engine {
 	r.POST("/v1/messages", ok)
 	r.GET("/health", ok)
 	r.GET("/api/v1/user/profile", ok)
+	r.POST("/api/v1/payment/webhook/easypay", ok)
+	r.GET("/api/v1/payment/webhook/easypay", ok)
 	return r
 }
 
@@ -84,6 +86,19 @@ func TestGeoBlock_AllowedCountry(t *testing.T) {
 	})
 	w := doGeoReq(r, http.MethodGet, "/", "US", "")
 	require.Equal(t, http.StatusOK, w.Code)
+}
+
+// 支付服务商回调即使来源国被封锁也必须放行（易支付回调来自 CN），否则支付成功却
+// 收不到回调、余额不上账。回归自 v0.1.150.1 上线后中国支付回调被 geo-block 拦截事故。
+func TestGeoBlock_PaymentWebhookBypassesBlockedCountry(t *testing.T) {
+	r := newGeoBlockRouter(config.GeoBlockConfig{
+		Enabled:          true,
+		BlockedCountries: []string{"CN"},
+	})
+	wPost := doGeoReq(r, http.MethodPost, "/api/v1/payment/webhook/easypay", "CN", "")
+	require.Equal(t, http.StatusOK, wPost.Code, "easypay POST 回调(CN)必须放行")
+	wGet := doGeoReq(r, http.MethodGet, "/api/v1/payment/webhook/easypay", "CN", "")
+	require.Equal(t, http.StatusOK, wGet.Code, "easypay GET 回调(CN)必须放行")
 }
 
 func TestGeoBlock_BlockedCountryAPIGatewayBypass(t *testing.T) {

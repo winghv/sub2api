@@ -18,6 +18,10 @@ var geoBlockAPIPrefixes = []string{
 	"/antigravity/",
 	"/responses/",
 	"/images/",
+	// 支付服务商回调(易支付/支付宝/微信/Stripe/Airwallex 等)由服务商服务器发起，
+	// 来源国家(如易支付在 CN)与终端用户无关，绝不能被地区封锁拦截，否则支付成功却
+	// 收不到回调、余额不上账。全部 /api/v1/payment/webhook/* 一律放行。
+	"/api/v1/payment/webhook/",
 }
 
 // geoBlockAPIExact 是需放行的精确 API 路径（无尾部 path 段的别名）。
