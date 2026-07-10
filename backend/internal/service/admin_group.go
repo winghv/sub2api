@@ -130,13 +130,23 @@ func defaultAllowImageGenerationForPlatform(platform string) bool {
 }
 
 func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupInput) (*Group, error) {
-	if input.RateMultiplier <= 0 {
-		return nil, errors.New("rate_multiplier must be > 0")
-	}
-
 	platform := input.Platform
 	if platform == "" {
 		platform = PlatformAnthropic
+	}
+
+	// 模拟 Claude Max 订阅计费（fork 定制，仅 anthropic 平台）。在 rate_multiplier 校验前判定，
+	// 保证平台不匹配时优先返回该错误（见 TestAdminService_CreateGroup_SimulateClaudeMaxRequiresAnthropic）。
+	simulateClaudeMaxEnabled := false
+	if input.SimulateClaudeMaxEnabled != nil {
+		simulateClaudeMaxEnabled = *input.SimulateClaudeMaxEnabled
+	}
+	if simulateClaudeMaxEnabled && platform != PlatformAnthropic {
+		return nil, errors.New("simulate_claude_max_enabled only supported for anthropic groups")
+	}
+
+	if input.RateMultiplier <= 0 {
+		return nil, errors.New("rate_multiplier must be > 0")
 	}
 
 	subscriptionType := input.SubscriptionType
@@ -256,15 +266,6 @@ func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupIn
 		if err != nil {
 			return nil, fmt.Errorf("failed to get accounts from source groups: %w", err)
 		}
-	}
-
-	// 模拟 Claude Max 订阅计费（fork 定制，仅 anthropic 平台）
-	simulateClaudeMaxEnabled := false
-	if input.SimulateClaudeMaxEnabled != nil {
-		simulateClaudeMaxEnabled = *input.SimulateClaudeMaxEnabled
-	}
-	if simulateClaudeMaxEnabled && platform != PlatformAnthropic {
-		return nil, errors.New("simulate_claude_max_enabled only supported for anthropic groups")
 	}
 
 	group := &Group{
