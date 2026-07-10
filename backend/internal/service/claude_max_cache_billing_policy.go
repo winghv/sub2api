@@ -197,11 +197,50 @@ func hasClaudeCacheSignals(parsed *ParsedRequest) bool {
 	return countExplicitCacheBreakpoints(parsed) > 0
 }
 
+// upstream 将 ParsedRequest 的 Body 改为 *RequestBodyRef，并移除了结构化的 System/Messages
+// 字段（改为绑定在 Body 上的 raw JSON range）。以下 helper 从原始请求体重建旧的结构化视图，
+// 使 fork 的缓存断点检测/token 估算逻辑无需大改即可复用。
+
+func claudeParsedBodyBytes(parsed *ParsedRequest) []byte {
+	if parsed == nil || parsed.Body == nil {
+		return nil
+	}
+	return parsed.Body.Bytes()
+}
+
+// claudeSystemFromParsed 从请求体解析 system 字段（string 或 []any 内容块）。
+func claudeSystemFromParsed(parsed *ParsedRequest) any {
+	body := claudeParsedBodyBytes(parsed)
+	if len(body) == 0 {
+		return nil
+	}
+	res := gjson.GetBytes(body, "system")
+	if !res.Exists() {
+		return nil
+	}
+	return res.Value()
+}
+
+// claudeMessagesFromParsed 从请求体解析 messages 数组（[]any）。
+func claudeMessagesFromParsed(parsed *ParsedRequest) []any {
+	body := claudeParsedBodyBytes(parsed)
+	if len(body) == 0 {
+		return nil
+	}
+	res := gjson.GetBytes(body, "messages")
+	if !res.IsArray() {
+		return nil
+	}
+	arr, _ := res.Value().([]any)
+	return arr
+}
+
 func hasTopLevelEphemeralCacheControl(parsed *ParsedRequest) bool {
-	if parsed == nil || len(parsed.Body) == 0 {
+	body := claudeParsedBodyBytes(parsed)
+	if len(body) == 0 {
 		return false
 	}
-	cacheType := strings.TrimSpace(gjson.GetBytes(parsed.Body, "cache_control.type").String())
+	cacheType := strings.TrimSpace(gjson.GetBytes(body, "cache_control.type").String())
 	return strings.EqualFold(cacheType, "ephemeral")
 }
 
@@ -214,7 +253,7 @@ func analyzeClaudeCacheProjection(parsed *ParsedRequest) claudeCacheProjection {
 	total := 0
 	lastBreakpointAt := -1
 
-	switch system := parsed.System.(type) {
+	switch system := claudeSystemFromParsed(parsed).(type) {
 	case string:
 		total += claudeMaxMessageOverheadTokens + estimateClaudeTextTokens(system)
 	case []any:
@@ -233,7 +272,7 @@ func analyzeClaudeCacheProjection(parsed *ParsedRequest) claudeCacheProjection {
 		}
 	}
 
-	for _, rawMsg := range parsed.Messages {
+	for _, rawMsg := range claudeMessagesFromParsed(parsed) {
 		total += claudeMaxMessageOverheadTokens
 		msg, ok := rawMsg.(map[string]any)
 		if !ok {
@@ -284,14 +323,14 @@ func countExplicitCacheBreakpoints(parsed *ParsedRequest) int {
 		return 0
 	}
 	total := 0
-	if system, ok := parsed.System.([]any); ok {
+	if system, ok := claudeSystemFromParsed(parsed).([]any); ok {
 		for _, raw := range system {
 			if block, ok := raw.(map[string]any); ok && hasEphemeralCacheControl(block) {
 				total++
 			}
 		}
 	}
-	for _, rawMsg := range parsed.Messages {
+	for _, rawMsg := range claudeMessagesFromParsed(parsed) {
 		msg, ok := rawMsg.(map[string]any)
 		if !ok {
 			continue
@@ -392,11 +431,12 @@ func estimateClaudeBlockTokens(block map[string]any) int {
 }
 
 func estimateLastUserMessageTokens(parsed *ParsedRequest) int {
-	if parsed == nil || len(parsed.Messages) == 0 {
+	messages := claudeMessagesFromParsed(parsed)
+	if len(messages) == 0 {
 		return 0
 	}
-	for i := len(parsed.Messages) - 1; i >= 0; i-- {
-		msg, ok := parsed.Messages[i].(map[string]any)
+	for i := len(messages) - 1; i >= 0; i-- {
+		msg, ok := messages[i].(map[string]any)
 		if !ok {
 			continue
 		}

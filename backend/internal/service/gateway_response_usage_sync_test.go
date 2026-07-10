@@ -36,9 +36,8 @@ func TestHandleNonStreamingResponse_UsageAlignedWithClaudeMaxSimulation(t *testi
 		Platform:                 PlatformAnthropic,
 		SimulateClaudeMaxEnabled: true,
 	}
-	parsed := &ParsedRequest{
-		Model: "claude-sonnet-4",
-		Messages: []any{
+	parsed := claudeMaxParsedFromBody(t, "claude-sonnet-4", map[string]any{
+		"messages": []any{
 			map[string]any{
 				"role": "user",
 				"content": []any{
@@ -54,7 +53,7 @@ func TestHandleNonStreamingResponse_UsageAlignedWithClaudeMaxSimulation(t *testi
 				},
 			},
 		},
-	}
+	})
 
 	upstreamBody := []byte(`{"id":"msg_1","model":"claude-sonnet-4","usage":{"input_tokens":120,"output_tokens":8}}`)
 	resp := &http.Response{
@@ -114,9 +113,8 @@ func TestHandleNonStreamingResponse_ClaudeMaxDisabled_NoSimulationIntercept(t *t
 		Platform:                 PlatformAnthropic,
 		SimulateClaudeMaxEnabled: false,
 	}
-	parsed := &ParsedRequest{
-		Model: "claude-sonnet-4",
-		Messages: []any{
+	parsed := claudeMaxParsedFromBody(t, "claude-sonnet-4", map[string]any{
+		"messages": []any{
 			map[string]any{
 				"role": "user",
 				"content": []any{
@@ -132,7 +130,7 @@ func TestHandleNonStreamingResponse_ClaudeMaxDisabled_NoSimulationIntercept(t *t
 				},
 			},
 		},
-	}
+	})
 
 	upstreamBody := []byte(`{"id":"msg_2","model":"claude-sonnet-4","usage":{"input_tokens":120,"output_tokens":8}}`)
 	resp := &http.Response{

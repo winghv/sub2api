@@ -20,6 +20,7 @@ export const useAppStore = defineStore('app', () => {
 
   const sidebarCollapsed = ref<boolean>(false)
   const mobileOpen = ref<boolean>(false)
+  const sidebarScrollTop = ref<number>(0)
   const loading = ref<boolean>(false)
   const toasts = ref<Toast[]>([])
 
@@ -359,7 +360,9 @@ export const useAppStore = defineStore('app', () => {
         channel_monitor_default_interval_seconds: 60,
         available_channels_enabled: false,
         risk_control_enabled: false,
+        service_quota_enabled: false,
         affiliate_enabled: false,
+        allow_user_view_error_requests: false,
       }
     }
 
@@ -408,6 +411,7 @@ export const useAppStore = defineStore('app', () => {
     // State
     sidebarCollapsed,
     mobileOpen,
+    sidebarScrollTop,
     loading,
     toasts,
 

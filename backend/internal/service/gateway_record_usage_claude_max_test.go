@@ -46,9 +46,8 @@ func TestRecordUsage_SimulateClaudeMaxEnabled_ProjectsUsageAndSkipsTTLOverride(t
 				InputTokens: 160,
 			},
 		},
-		ParsedRequest: &ParsedRequest{
-			Model: "claude-sonnet-4",
-			Messages: []any{
+		ParsedRequest: claudeMaxParsedFromBody(t, "claude-sonnet-4", map[string]any{
+			"messages": []any{
 				map[string]any{
 					"role": "user",
 					"content": []any{
@@ -64,7 +63,7 @@ func TestRecordUsage_SimulateClaudeMaxEnabled_ProjectsUsageAndSkipsTTLOverride(t
 					},
 				},
 			},
-		},
+		}),
 		APIKey: &APIKey{
 			ID:      1,
 			GroupID: &groupID,

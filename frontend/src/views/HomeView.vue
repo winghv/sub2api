@@ -274,6 +274,7 @@ import { useAuthStore, useAppStore } from '@/stores'
 import LocaleSwitcher from '@/components/common/LocaleSwitcher.vue'
 import Icon from '@/components/icons/Icon.vue'
 import { DEFAULT_SITE_LOGO, DEFAULT_SITE_NAME, isDefaultSiteSubtitle } from '@/utils/brand'
+import { sanitizeUrl } from '@/utils/url'
 
 type IconName = InstanceType<typeof Icon>['$props']['name']
 
@@ -282,8 +283,9 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 const appStore = useAppStore()
 
+// Site settings - dev 品牌默认值 + upstream sanitizeUrl 安全包装
 const siteName = computed(() => appStore.cachedPublicSettings?.site_name || appStore.siteName || DEFAULT_SITE_NAME)
-const siteLogo = computed(() => appStore.cachedPublicSettings?.site_logo || appStore.siteLogo || '')
+const siteLogo = computed(() => sanitizeUrl(appStore.cachedPublicSettings?.site_logo || appStore.siteLogo || '', { allowRelative: true, allowDataUrl: true }))
 const localizedDefaultSubtitle = computed(() => t('home.cyber.subtitle'))
 const siteSubtitle = computed(() => {
   const configuredSubtitle = appStore.cachedPublicSettings?.site_subtitle?.trim()
@@ -292,7 +294,7 @@ const siteSubtitle = computed(() => {
   }
   return configuredSubtitle || localizedDefaultSubtitle.value
 })
-const docUrl = computed(() => appStore.cachedPublicSettings?.doc_url || appStore.docUrl || '')
+const docUrl = computed(() => sanitizeUrl(appStore.cachedPublicSettings?.doc_url || appStore.docUrl || ''))
 const homeContent = computed(() => appStore.cachedPublicSettings?.home_content || '')
 
 const terminalLines = computed(() => [

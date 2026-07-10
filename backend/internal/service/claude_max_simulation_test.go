@@ -1,9 +1,22 @@
 package service
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 )
+
+// claudeMaxParsedFromBody 构建 ParsedRequest，将 messages/system 序列化进 Body。
+// upstream 把 ParsedRequest.Messages/System 结构字段改为绑定 Body 的 raw JSON range，
+// 因此测试也从 Body 提供请求内容（claude max 策略 helper 从 Body 解析缓存信号）。
+func claudeMaxParsedFromBody(t *testing.T, model string, body map[string]any) *ParsedRequest {
+	t.Helper()
+	raw, err := json.Marshal(body)
+	if err != nil {
+		t.Fatalf("marshal body: %v", err)
+	}
+	return &ParsedRequest{Model: model, Body: NewRequestBodyRef(raw)}
+}
 
 func TestProjectUsageToClaudeMax1H_Conservation(t *testing.T) {
 	usage := &ClaudeUsage{
@@ -12,9 +25,8 @@ func TestProjectUsageToClaudeMax1H_Conservation(t *testing.T) {
 		CacheCreation5mTokens:    0,
 		CacheCreation1hTokens:    0,
 	}
-	parsed := &ParsedRequest{
-		Model: "claude-sonnet-4-5",
-		Messages: []any{
+	parsed := claudeMaxParsedFromBody(t, "claude-sonnet-4-5", map[string]any{
+		"messages": []any{
 			map[string]any{
 				"role": "user",
 				"content": []any{
@@ -30,7 +42,7 @@ func TestProjectUsageToClaudeMax1H_Conservation(t *testing.T) {
 				},
 			},
 		},
-	}
+	})
 
 	changed := projectUsageToClaudeMax1H(usage, parsed)
 	if !changed {
@@ -59,9 +71,8 @@ func TestProjectUsageToClaudeMax1H_Conservation(t *testing.T) {
 }
 
 func TestComputeClaudeMaxProjectedInputTokens_Deterministic(t *testing.T) {
-	parsed := &ParsedRequest{
-		Model: "claude-opus-4-5",
-		Messages: []any{
+	parsed := claudeMaxParsedFromBody(t, "claude-opus-4-5", map[string]any{
+		"messages": []any{
 			map[string]any{
 				"role": "user",
 				"content": []any{
@@ -77,7 +88,7 @@ func TestComputeClaudeMaxProjectedInputTokens_Deterministic(t *testing.T) {
 				},
 			},
 		},
-	}
+	})
 
 	got1 := computeClaudeMaxProjectedInputTokens(4096, parsed)
 	got2 := computeClaudeMaxProjectedInputTokens(4096, parsed)
@@ -101,8 +112,8 @@ func TestShouldSimulateClaudeMaxUsage(t *testing.T) {
 				CacheCreation1hTokens:    0,
 			},
 		},
-		ParsedRequest: &ParsedRequest{
-			Messages: []any{
+		ParsedRequest: claudeMaxParsedFromBody(t, "claude-sonnet-4-5", map[string]any{
+			"messages": []any{
 				map[string]any{
 					"role": "user",
 					"content": []any{
@@ -118,7 +129,7 @@ func TestShouldSimulateClaudeMaxUsage(t *testing.T) {
 					},
 				},
 			},
-		},
+		}),
 		APIKey: &APIKey{Group: group},
 	}
 
@@ -126,17 +137,17 @@ func TestShouldSimulateClaudeMaxUsage(t *testing.T) {
 		t.Fatalf("expected simulate=true for claude group with cache signal")
 	}
 
-	input.ParsedRequest = &ParsedRequest{
-		Messages: []any{
+	input.ParsedRequest = claudeMaxParsedFromBody(t, "claude-sonnet-4-5", map[string]any{
+		"messages": []any{
 			map[string]any{"role": "user", "content": "no cache signal"},
 		},
-	}
+	})
 	if shouldSimulateClaudeMaxUsage(input) {
 		t.Fatalf("expected simulate=false when request has no cache signal")
 	}
 
-	input.ParsedRequest = &ParsedRequest{
-		Messages: []any{
+	input.ParsedRequest = claudeMaxParsedFromBody(t, "claude-sonnet-4-5", map[string]any{
+		"messages": []any{
 			map[string]any{
 				"role": "user",
 				"content": []any{
@@ -148,7 +159,7 @@ func TestShouldSimulateClaudeMaxUsage(t *testing.T) {
 				},
 			},
 		},
-	}
+	})
 	input.Result.Usage.CacheCreationInputTokens = 100
 	if shouldSimulateClaudeMaxUsage(input) {
 		t.Fatalf("expected simulate=false when cache creation already exists")
