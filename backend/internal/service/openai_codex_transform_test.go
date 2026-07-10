@@ -1560,7 +1560,9 @@ func TestStripOpenAIImageGenerationTools_RemovesToolAndToolChoice(t *testing.T) 
 	tools, ok := reqBody["tools"].([]any)
 	require.True(t, ok)
 	require.Len(t, tools, 1)
-	require.Equal(t, "function", tools[0].(map[string]any)["type"])
+	firstTool, ok := tools[0].(map[string]any)
+	require.True(t, ok)
+	require.Equal(t, "function", firstTool["type"])
 	_, hasChoice := reqBody["tool_choice"]
 	require.False(t, hasChoice)
 	require.False(t, hasOpenAIImageGenerationTool(reqBody))
@@ -1589,7 +1591,8 @@ func TestStripOpenAIImageGenerationTools_NoopWhenAbsent(t *testing.T) {
 	}
 
 	require.False(t, stripOpenAIImageGenerationTools(reqBody))
-	tools := reqBody["tools"].([]any)
+	tools, ok := reqBody["tools"].([]any)
+	require.True(t, ok)
 	require.Len(t, tools, 1)
 	require.Equal(t, "auto", reqBody["tool_choice"])
 }
@@ -1607,9 +1610,12 @@ func TestStripOpenAIImageGenerationTools_RemovesTopLevelNamespace(t *testing.T) 
 
 	require.True(t, stripOpenAIImageGenerationTools(reqBody))
 	require.False(t, hasOpenAIImageGenerationTool(reqBody))
-	tools := reqBody["tools"].([]any)
+	tools, ok := reqBody["tools"].([]any)
+	require.True(t, ok)
 	require.Len(t, tools, 1)
-	require.Equal(t, "function", tools[0].(map[string]any)["type"])
+	firstTool, ok := tools[0].(map[string]any)
+	require.True(t, ok)
+	require.Equal(t, "function", firstTool["type"])
 }
 
 // P1 回归：Codex / Responses Lite 用 input[].additional_tools 承载 image_gen namespace，
@@ -1633,9 +1639,12 @@ func TestStripOpenAIImageGenerationTools_RemovesAdditionalToolsNamespace(t *test
 	require.False(t, hasOpenAIImageGenerationTool(reqBody))
 
 	// 空壳 additional_tools 应被整项丢弃，普通 message 保留。
-	input := reqBody["input"].([]any)
+	input, ok := reqBody["input"].([]any)
+	require.True(t, ok)
 	require.Len(t, input, 1)
-	require.Equal(t, "message", input[0].(map[string]any)["type"])
+	firstItem, ok := input[0].(map[string]any)
+	require.True(t, ok)
+	require.Equal(t, "message", firstItem["type"])
 }
 
 // additional_tools 内混合工具时，仅剥离 image_gen，其余工具与该项保留。
@@ -1655,9 +1664,15 @@ func TestStripOpenAIImageGenerationTools_KeepsOtherAdditionalTools(t *testing.T)
 
 	require.True(t, stripOpenAIImageGenerationTools(reqBody))
 	require.False(t, hasOpenAIImageGenerationTool(reqBody))
-	input := reqBody["input"].([]any)
+	input, ok := reqBody["input"].([]any)
+	require.True(t, ok)
 	require.Len(t, input, 1)
-	tools := input[0].(map[string]any)["tools"].([]any)
+	additional, ok := input[0].(map[string]any)
+	require.True(t, ok)
+	tools, ok := additional["tools"].([]any)
+	require.True(t, ok)
 	require.Len(t, tools, 1)
-	require.Equal(t, "web_search", tools[0].(map[string]any)["name"])
+	remaining, ok := tools[0].(map[string]any)
+	require.True(t, ok)
+	require.Equal(t, "web_search", remaining["name"])
 }
