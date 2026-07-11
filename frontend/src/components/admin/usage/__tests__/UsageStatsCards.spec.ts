@@ -64,4 +64,21 @@ describe('UsageStatsCards', () => {
     expect(text).toContain('Cache Read')
     expect(text).toContain('22')
   })
+
+  it('raises the total token card while its cache tooltip is active', () => {
+    const wrapper = mount(UsageStatsCards, {
+      props: {
+        stats,
+      },
+      global: {
+        stubs: {
+          Icon: true,
+        },
+      },
+    })
+
+    const totalTokenCard = wrapper.findAll('.card')[1]
+    expect(totalTokenCard.classes()).toContain('hover:z-10')
+    expect(totalTokenCard.classes()).toContain('focus-within:z-10')
+  })
 })
