@@ -42,6 +42,20 @@ func TestIsImageGenerationIntent(t *testing.T) {
 			want:     true,
 		},
 		{
+			name:     "namespace image_gen tool choice",
+			endpoint: "/v1/responses",
+			model:    "gpt-5.5",
+			body:     []byte(`{"model":"gpt-5.5","tool_choice":{"type":"namespace","name":"image_gen"}}`),
+			want:     true,
+		},
+		{
+			name:     "custom imagegen function tool choice is not image intent",
+			endpoint: "/v1/responses",
+			model:    "gpt-5.5",
+			body:     []byte(`{"model":"gpt-5.5","tool_choice":{"function":{"name":"imagegen"}}}`),
+			want:     false,
+		},
+		{
 			name:     "required tool choice alone is text",
 			endpoint: "/v1/responses",
 			model:    "gpt-5.4",
@@ -61,6 +75,13 @@ func TestIsImageGenerationIntent(t *testing.T) {
 			model:    "gpt-5.5",
 			body:     []byte(`{"model":"gpt-5.5","tools":[{"type":"namespace","name":"image_gen","tools":[{"type":"function","name":"imagegen"}]}]}`),
 			want:     true,
+		},
+		{
+			name:     "custom namespace with nested imagegen function is not image intent",
+			endpoint: "/v1/responses",
+			model:    "gpt-5.5",
+			body:     []byte(`{"model":"gpt-5.5","tools":[{"type":"namespace","name":"media_tools","tools":[{"type":"function","name":"imagegen"}]}]}`),
+			want:     false,
 		},
 		{
 			name:     "namespace image_gen in input additional_tools (Responses Lite)",
@@ -117,6 +138,40 @@ func TestIsImageGenerationIntentMap_NamespaceImageGen(t *testing.T) {
 				},
 			},
 			want: true,
+		},
+		{
+			name: "custom namespace with nested imagegen function is not image intent",
+			reqBody: map[string]any{
+				"model": "gpt-5.5",
+				"tools": []any{
+					map[string]any{
+						"type": "namespace",
+						"name": "media_tools",
+						"tools": []any{
+							map[string]any{"type": "function", "name": "imagegen"},
+						},
+					},
+				},
+			},
+			want: false,
+		},
+		{
+			name: "namespace image_gen tool choice",
+			reqBody: map[string]any{
+				"model":       "gpt-5.5",
+				"tool_choice": map[string]any{"type": "namespace", "name": "image_gen"},
+			},
+			want: true,
+		},
+		{
+			name: "custom imagegen function tool choice is not image intent",
+			reqBody: map[string]any{
+				"model": "gpt-5.5",
+				"tool_choice": map[string]any{
+					"function": map[string]any{"name": "imagegen"},
+				},
+			},
+			want: false,
 		},
 		{
 			name: "non-image namespace not flagged",
@@ -301,19 +356,19 @@ func TestCollectOpenAIImageOutputSizesFromSSEBody(t *testing.T) {
 	require.Equal(t, []string{"3840x2160", "1024x1024"}, collectOpenAIImageOutputSizesFromSSEBody(body))
 }
 
-// P2 回归：Spark guard 依赖 openAIRequestBodyHasImageGenerationTool，必须能识别
-// input[].additional_tools 里的 image_gen namespace（顶层 tools 为空的 Codex/Responses Lite 形态），
-// 否则 Spark strip 不触发，additional_tools 直达上游返回 400。
-func TestOpenAIRequestBodyHasImageGenerationTool_InputAdditionalToolsNamespace(t *testing.T) {
+// P2 回归：生图声明检测(upstream 已重命名为 openAIRequestBodyHasImageGenerationDeclaration)
+// 必须能识别 input[].additional_tools 里的 image_gen namespace（顶层 tools 为空的
+// Codex/Responses Lite 形态），否则 Spark strip 不触发,additional_tools 直达上游返回 400。
+func TestOpenAIRequestBodyHasImageGenerationDeclaration_InputAdditionalToolsNamespace(t *testing.T) {
 	// 顶层 tools 为空，仅 input.additional_tools 携带 image_gen
 	body := []byte(`{"model":"gpt-5.3-codex-spark","input":[{"type":"message","role":"user","content":"hi"},{"type":"additional_tools","tools":[{"type":"namespace","name":"image_gen"}]}]}`)
-	require.True(t, openAIRequestBodyHasImageGenerationTool(body))
+	require.True(t, openAIRequestBodyHasImageGenerationDeclaration(body))
 
 	// 无任何生图信号时为 false
 	none := []byte(`{"model":"gpt-5.3-codex-spark","input":[{"type":"message","role":"user","content":"hi"}]}`)
-	require.False(t, openAIRequestBodyHasImageGenerationTool(none))
+	require.False(t, openAIRequestBodyHasImageGenerationDeclaration(none))
 
 	// 顶层 namespace 形态也命中
 	top := []byte(`{"model":"gpt-5.3-codex-spark","tools":[{"type":"namespace","name":"image_gen"}]}`)
-	require.True(t, openAIRequestBodyHasImageGenerationTool(top))
+	require.True(t, openAIRequestBodyHasImageGenerationDeclaration(top))
 }
