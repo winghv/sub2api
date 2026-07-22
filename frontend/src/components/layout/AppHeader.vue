@@ -1,21 +1,21 @@
 <template>
-  <header class="app-header sticky top-0 z-30">
-    <div class="app-header__inner flex h-16 items-center justify-between px-4 md:px-6">
+  <header class="glass sticky top-0 z-30 border-b border-gray-200/50 dark:border-dark-700/50">
+    <div class="flex h-16 items-center justify-between px-4 md:px-6">
       <!-- Left: Mobile Menu Toggle + Page Title -->
       <div class="flex items-center gap-4">
         <button
           @click="toggleMobileSidebar"
-          class="app-header__icon-button btn-icon lg:hidden"
-          aria-label="Toggle Menu"
+          class="btn-ghost btn-icon lg:hidden"
+          :aria-label="t('common.toggleMenu')"
         >
           <Icon name="menu" size="md" />
         </button>
 
         <div class="hidden lg:block">
-          <h1 class="app-header__title text-lg font-semibold">
+          <h1 class="text-lg font-semibold text-gray-900 dark:text-white">
             {{ pageTitle }}
           </h1>
-          <p v-if="pageDescription" class="app-header__description text-xs">
+          <p v-if="pageDescription" class="text-xs text-gray-500 dark:text-dark-400">
             {{ pageDescription }}
           </p>
         </div>
@@ -32,7 +32,7 @@
           :href="docUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="app-header__link flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors"
+          class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-dark-400 dark:hover:bg-dark-800 dark:hover:text-white"
         >
           <Icon name="book" size="sm" />
           <span class="hidden sm:inline">{{ t('nav.docs') }}</span>
@@ -47,10 +47,10 @@
         <!-- Balance Display -->
         <div
           v-if="user"
-          class="app-balance-chip group relative hidden items-center gap-2 rounded-xl px-3 py-1.5 sm:flex"
+          class="group relative hidden items-center gap-2 rounded-xl bg-primary-50 px-3 py-1.5 dark:bg-primary-900/20 sm:flex"
         >
           <svg
-            class="h-4 w-4"
+            class="h-4 w-4 text-primary-600 dark:text-primary-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -95,10 +95,10 @@
         <div v-if="user" class="relative" ref="dropdownRef">
           <button
             @click="toggleDropdown"
-            class="app-user-button flex items-center gap-2 rounded-xl p-1.5 transition-colors"
-            aria-label="User Menu"
+            class="flex items-center gap-2 rounded-xl p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-dark-800"
+            :aria-label="t('common.userMenu')"
           >
-            <div class="app-user-avatar flex h-8 w-8 items-center justify-center overflow-hidden rounded-xl text-sm font-medium">
+            <div class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-sm font-medium text-white shadow-sm">
               <img
                 v-if="avatarUrl"
                 :src="avatarUrl"
@@ -108,14 +108,14 @@
               <span v-else>{{ userInitials }}</span>
             </div>
             <div class="hidden text-left md:block">
-              <div class="app-user-name text-sm font-medium">
+              <div class="text-sm font-medium text-gray-900 dark:text-white">
                 {{ displayName }}
               </div>
-              <div class="app-user-role text-xs capitalize">
+              <div class="text-xs capitalize text-gray-500 dark:text-dark-400">
                 {{ user.role }}
               </div>
             </div>
-            <Icon name="chevronDown" size="sm" class="app-user-chevron hidden md:block" />
+            <Icon name="chevronDown" size="sm" class="hidden text-gray-400 md:block" />
           </button>
 
           <!-- Dropdown Menu -->
@@ -152,6 +152,25 @@
                   <Icon name="key" size="sm" />
                   {{ t('nav.apiKeys') }}
                 </router-link>
+
+                <a
+                  v-if="authStore.isAdmin"
+                  href="https://github.com/Wei-Shaw/sub2api"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  @click="closeDropdown"
+                  class="dropdown-item"
+                >
+                  <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+                    />
+                  </svg>
+                  {{ t('nav.github') }}
+                </a>
+
               </div>
 
               <!-- Contact Support (only show if configured) -->
@@ -351,72 +370,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.app-header {
-  border-bottom: 1px solid rgba(0, 229, 255, 0.18);
-  background: rgba(5, 10, 22, 0.72);
-  backdrop-filter: blur(18px);
-  box-shadow:
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
-    0 16px 48px rgba(0, 0, 0, 0.18);
-}
-
-.app-header__inner {
-  min-width: 0;
-}
-
-.app-header__title {
-  color: #f7fcff;
-  letter-spacing: 0;
-}
-
-.app-header__description {
-  color: #8096aa;
-}
-
-.app-header__icon-button,
-.app-header__link,
-.app-user-button {
-  border: 1px solid rgba(0, 229, 255, 0.22);
-  background: rgba(8, 16, 34, 0.72);
-  color: #d7f7ff;
-}
-
-.app-header__icon-button:hover,
-.app-header__link:hover,
-.app-user-button:hover {
-  border-color: rgba(0, 229, 255, 0.48);
-  background: rgba(0, 229, 255, 0.11);
-  color: #ffffff;
-}
-
-.app-balance-chip {
-  border: 1px solid rgba(57, 255, 20, 0.32);
-  background: rgba(57, 255, 20, 0.08);
-  color: #dfffd8;
-  box-shadow: inset 0 0 18px rgba(57, 255, 20, 0.06);
-}
-
-.app-balance-chip svg {
-  color: #39ff14;
-}
-
-.app-user-avatar {
-  border: 1px solid rgba(57, 255, 20, 0.58);
-  background:
-    linear-gradient(135deg, rgba(57, 255, 20, 0.95), rgba(0, 229, 255, 0.94));
-  color: #031007;
-  box-shadow: 0 0 22px rgba(57, 255, 20, 0.16);
-}
-
-.app-user-name {
-  color: #f7fcff;
-}
-
-.app-user-role,
-.app-user-chevron {
-  color: #8096aa;
-}
-
 .dropdown-enter-active,
 .dropdown-leave-active {
   transition: all 0.2s ease;
