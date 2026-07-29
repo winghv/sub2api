@@ -281,12 +281,12 @@
             {{ t('home.docs') }}
           </a>
           <a
-            :href="githubUrl"
+            :href="cloudUrl"
             target="_blank"
             rel="noopener noreferrer"
             class="cyber-footer__link"
           >
-            GitHub
+            Superwhv Cloud
           </a>
         </div>
       </div>
@@ -338,7 +338,7 @@ const isHomeContentUrl = computed(() => {
 })
 
 const isDark = ref(document.documentElement.classList.contains('dark'))
-const githubUrl = 'https://github.com/Wei-Shaw/sub2api'
+const cloudUrl = 'https://cloud.superwhv.me'
 const currentYear = computed(() => new Date().getFullYear())
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
@@ -1114,6 +1114,8 @@ onMounted(() => {
 .cyber-workflow,
 .cyber-final-cta {
   margin-top: 56px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
 }
 
 .cyber-section-heading {
@@ -1882,7 +1884,8 @@ onMounted(() => {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* Skip ambient loops on small screens — largest cheap perf win for homepage */
+@media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
   .cyber-home::before {
     animation: cyber-grid-drift 22s linear infinite;
   }

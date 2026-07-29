@@ -3,7 +3,10 @@
        a nested .dark would lock the whole console into dark styles. -->
   <div
     class="app-shell min-h-screen"
-    :class="isDark ? 'app-shell--dark' : 'app-shell--light'"
+    :class="[
+      isDark ? 'app-shell--dark' : 'app-shell--light',
+      { 'app-shell--motion-paused': motionPaused }
+    ]"
   >
     <div class="app-backdrop" aria-hidden="true">
       <span class="app-backdrop__beam app-backdrop__beam--cyan"></span>
@@ -46,9 +49,14 @@ const sidebarCollapsed = computed(() => appStore.sidebarCollapsed)
 const isAdmin = computed(() => authStore.user?.role === 'admin')
 
 const isDark = ref(document.documentElement.classList.contains('dark'))
+const motionPaused = ref(typeof document !== 'undefined' && document.hidden)
 
 function syncThemeFromDocument() {
   isDark.value = document.documentElement.classList.contains('dark')
+}
+
+function syncMotionPause() {
+  motionPaused.value = document.hidden
 }
 
 let themeObserver: MutationObserver | null = null
@@ -63,16 +71,19 @@ const onboardingStore = useOnboardingStore()
 onMounted(() => {
   onboardingStore.setReplayCallback(replayTour)
   syncThemeFromDocument()
+  syncMotionPause()
   themeObserver = new MutationObserver(syncThemeFromDocument)
   themeObserver.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['class']
   })
+  document.addEventListener('visibilitychange', syncMotionPause)
 })
 
 onUnmounted(() => {
   themeObserver?.disconnect()
   themeObserver = null
+  document.removeEventListener('visibilitychange', syncMotionPause)
 })
 
 defineExpose({ replayTour })
@@ -217,7 +228,8 @@ defineExpose({ replayTour })
   z-index: 3;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* Desktop-only ambient motion: cheap win on mobile CPU/battery */
+@media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
   .app-shell::before {
     animation: app-grid-drift 22s linear infinite;
   }
@@ -225,6 +237,12 @@ defineExpose({ replayTour })
   .app-backdrop__scan {
     animation: app-noise-shift 16s steps(8, end) infinite;
   }
+}
+
+/* Pause decorative motion when the tab is hidden (class toggled in script) */
+.app-shell--motion-paused::before,
+.app-shell--motion-paused .app-backdrop__scan {
+  animation: none !important;
 }
 
 @keyframes app-grid-drift {
