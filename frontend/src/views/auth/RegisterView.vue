@@ -20,7 +20,7 @@
           <div class="flex-shrink-0">
             <Icon name="exclamationCircle" size="md" class="text-amber-500" />
           </div>
-          <p class="text-sm leading-6 text-amber-200">
+          <p class="text-sm leading-6 text-amber-800 dark:text-amber-200">
             {{ t('auth.registrationDisabled') }}
           </p>
         </div>
