@@ -839,10 +839,14 @@ function toggleSidebar() {
   appStore.toggleSidebar()
 }
 
+function applyTheme(dark: boolean) {
+  isDark.value = dark
+  document.documentElement.classList.toggle('dark', dark)
+  localStorage.setItem('theme', dark ? 'dark' : 'light')
+}
+
 function toggleTheme() {
-  isDark.value = !isDark.value
-  document.documentElement.classList.toggle('dark', isDark.value)
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  applyTheme(!isDark.value)
 }
 
 function closeMobile() {
@@ -912,15 +916,12 @@ function handleGroupClick(item: NavItem) {
   }
 }
 
-// Initialize theme
+// Initialize theme (must also clear dark when light is selected)
 const savedTheme = localStorage.getItem('theme')
-if (
+const shouldUseDark =
   savedTheme === 'dark' ||
   (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-) {
-  isDark.value = true
-  document.documentElement.classList.add('dark')
-}
+applyTheme(shouldUseDark)
 
 // Fetch admin settings (for feature-gated nav items like Ops).
 watch(

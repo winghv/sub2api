@@ -1,5 +1,10 @@
 <template>
-  <div class="app-shell dark min-h-screen">
+  <!-- Do not hardcode `dark` here — Tailwind darkMode is class-based and
+       a nested .dark would lock the whole console into dark styles. -->
+  <div
+    class="app-shell min-h-screen"
+    :class="isDark ? 'app-shell--dark' : 'app-shell--light'"
+  >
     <div class="app-backdrop" aria-hidden="true">
       <span class="app-backdrop__beam app-backdrop__beam--cyan"></span>
       <span class="app-backdrop__beam app-backdrop__beam--violet"></span>
@@ -27,7 +32,7 @@
 
 <script setup lang="ts">
 import '@/styles/onboarding.css'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAppStore } from '@/stores'
 import { useAuthStore } from '@/stores/auth'
 import { useOnboardingTour } from '@/composables/useOnboardingTour'
@@ -40,6 +45,14 @@ const authStore = useAuthStore()
 const sidebarCollapsed = computed(() => appStore.sidebarCollapsed)
 const isAdmin = computed(() => authStore.user?.role === 'admin')
 
+const isDark = ref(document.documentElement.classList.contains('dark'))
+
+function syncThemeFromDocument() {
+  isDark.value = document.documentElement.classList.contains('dark')
+}
+
+let themeObserver: MutationObserver | null = null
+
 const { replayTour } = useOnboardingTour({
   storageKey: isAdmin.value ? 'admin_guide' : 'user_guide',
   autoStart: true
@@ -49,12 +62,24 @@ const onboardingStore = useOnboardingStore()
 
 onMounted(() => {
   onboardingStore.setReplayCallback(replayTour)
+  syncThemeFromDocument()
+  themeObserver = new MutationObserver(syncThemeFromDocument)
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  })
+})
+
+onUnmounted(() => {
+  themeObserver?.disconnect()
+  themeObserver = null
 })
 
 defineExpose({ replayTour })
 </script>
 
 <style scoped>
+/* Default / dark cyber shell */
 .app-shell {
   position: relative;
   overflow: hidden;
@@ -65,6 +90,16 @@ defineExpose({ replayTour })
     #050711;
   color: #f5fbff;
   color-scheme: dark;
+}
+
+.app-shell--light {
+  background:
+    radial-gradient(circle at 78% 16%, rgba(0, 180, 216, 0.1), transparent 32%),
+    radial-gradient(circle at 18% 76%, rgba(34, 197, 94, 0.06), transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 48%, #eef2f7 100%),
+    #f8fafc;
+  color: #0f172a;
+  color-scheme: light;
 }
 
 .app-shell::before,
@@ -83,6 +118,13 @@ defineExpose({ replayTour })
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.84), transparent 92%);
 }
 
+.app-shell--light::before {
+  background:
+    repeating-linear-gradient(0deg, rgba(14, 116, 144, 0.05) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(14, 116, 144, 0.04) 0 1px, transparent 1px 28px);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), transparent 92%);
+}
+
 .app-shell::after {
   z-index: 1;
   opacity: 0.1;
@@ -93,6 +135,17 @@ defineExpose({ replayTour })
     rgba(255, 255, 255, 0.08) 7px
   );
   mix-blend-mode: screen;
+}
+
+.app-shell--light::after {
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 6px,
+    rgba(15, 23, 42, 0.05) 7px
+  );
 }
 
 .app-backdrop {
@@ -112,16 +165,29 @@ defineExpose({ replayTour })
   clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
 }
 
+.app-shell--light .app-backdrop__beam {
+  border-color: rgba(15, 23, 42, 0.06);
+  opacity: 0.45;
+}
+
 .app-backdrop__beam--cyan {
   top: 14%;
   right: -24%;
   background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.18), transparent);
 }
 
+.app-shell--light .app-backdrop__beam--cyan {
+  background: linear-gradient(90deg, transparent, rgba(0, 180, 216, 0.14), transparent);
+}
+
 .app-backdrop__beam--violet {
   bottom: 10%;
   left: -32%;
   background: linear-gradient(90deg, transparent, rgba(178, 91, 255, 0.14), transparent);
+}
+
+.app-shell--light .app-backdrop__beam--violet {
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
 }
 
 .app-backdrop__scan {
@@ -132,6 +198,13 @@ defineExpose({ replayTour })
     linear-gradient(90deg, rgba(57, 255, 20, 0.12) 1px, transparent 1px),
     linear-gradient(rgba(57, 255, 20, 0.08) 1px, transparent 1px);
   background-size: 7px 7px;
+}
+
+.app-shell--light .app-backdrop__scan {
+  opacity: 0.04;
+  background-image:
+    linear-gradient(90deg, rgba(22, 163, 74, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(22, 163, 74, 0.05) 1px, transparent 1px);
 }
 
 .app-content {
