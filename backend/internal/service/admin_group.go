@@ -296,21 +296,9 @@ func groupSupportsOAuthOnlyFilter(platform string) bool {
 }
 
 func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupInput) (*Group, error) {
-	platform := input.Platform
-	if platform == "" {
-		platform = PlatformAnthropic
-	}
-	maxReasoningEffort, err := normalizeMaxReasoningEffortForPlatform(platform, input.MaxReasoningEffort)
-	if err != nil {
-		return nil, infraerrors.Newf(http.StatusBadRequest, "INVALID_MAX_REASONING_EFFORT", "%v", err)
-	}
-	reasoningEffortMappings, err := NormalizeReasoningEffortMappings(platform, input.ReasoningEffortMappings)
-	if err != nil {
-		return nil, infraerrors.Newf(http.StatusBadRequest, "INVALID_REASONING_EFFORT_MAPPING", "%v", err)
-	}
+	platform := NormalizeGroupPlatform(input.Platform)
 
-	// 模拟 Claude Max 订阅计费（fork 定制，仅 anthropic 平台）。在 rate_multiplier 校验前判定，
-	// 保证平台不匹配时优先返回该错误（见 TestAdminService_CreateGroup_SimulateClaudeMaxRequiresAnthropic）。
+	// fork: validate simulate_claude_max before rate_multiplier
 	simulateClaudeMaxEnabled := false
 	if input.SimulateClaudeMaxEnabled != nil {
 		simulateClaudeMaxEnabled = *input.SimulateClaudeMaxEnabled
@@ -321,6 +309,14 @@ func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupIn
 
 	if input.RateMultiplier <= 0 {
 		return nil, errors.New("rate_multiplier must be > 0")
+	}
+	maxReasoningEffort, err := normalizeMaxReasoningEffortForPlatform(platform, input.MaxReasoningEffort)
+	if err != nil {
+		return nil, infraerrors.Newf(http.StatusBadRequest, "INVALID_MAX_REASONING_EFFORT", "%v", err)
+	}
+	reasoningEffortMappings, err := NormalizeReasoningEffortMappings(platform, input.ReasoningEffortMappings)
+	if err != nil {
+		return nil, infraerrors.Newf(http.StatusBadRequest, "INVALID_REASONING_EFFORT_MAPPING", "%v", err)
 	}
 
 	subscriptionType := input.SubscriptionType
@@ -341,6 +337,10 @@ func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupIn
 	videoPrice720P := normalizePrice(input.VideoPrice720P)
 	videoPrice1080P := normalizePrice(input.VideoPrice1080P)
 	webSearchPricePerCall := normalizePrice(input.WebSearchPricePerCall)
+	searchPricePer1k := normalizePrice(input.SearchPricePer1k)
+	audioRealtimePricePerMin := normalizePrice(input.AudioRealtimePricePerMin)
+	audioTTSPricePerMillionChars := normalizePrice(input.AudioTTSPricePerMillionChars)
+	audioSTTPricePerHour := normalizePrice(input.AudioSTTPricePerHour)
 	imageRateMultiplier := 1.0
 	if input.ImageRateMultiplier != nil {
 		if *input.ImageRateMultiplier < 0 {
@@ -382,6 +382,20 @@ func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupIn
 	// 先归一化（非订阅分组清空高峰配置、清洗停用状态下的脏字段）再校验，与 UpdateGroup 同一收口。
 	peakRateEnabled, peakStart, peakEnd, peakRateMultiplier := NormalizePeakRateConfig(subscriptionType, input.PeakRateEnabled, input.PeakStart, input.PeakEnd, peakRateMultiplier)
 	if err := ValidatePeakRateConfig(subscriptionType, peakRateEnabled, peakStart, peakEnd, peakRateMultiplier); err != nil {
+		return nil, err
+	}
+
+	profitMinMargin := 0.0
+	if input.ProfitMinMargin != nil {
+		profitMinMargin = *input.ProfitMinMargin
+	}
+	profitSafetyBuffer := 0.0
+	if input.ProfitSafetyBuffer != nil {
+		profitSafetyBuffer = *input.ProfitSafetyBuffer
+	}
+	// 利润控制与高峰倍率同一收口顺序：先按平台归一化（不支持的平台重置），再校验。
+	profitControlEnabled, profitMinMargin, profitSafetyBuffer := NormalizeProfitControlConfig(platform, input.ProfitControlEnabled, profitMinMargin, profitSafetyBuffer)
+	if err := ValidateProfitControlConfig(platform, profitControlEnabled, profitMinMargin, profitSafetyBuffer); err != nil {
 		return nil, err
 	}
 
@@ -466,17 +480,24 @@ func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupIn
 		PeakStart:                       peakStart,
 		PeakEnd:                         peakEnd,
 		PeakRateMultiplier:              peakRateMultiplier,
+		ProfitControlEnabled:            profitControlEnabled,
+		ProfitMinMargin:                 profitMinMargin,
+		ProfitSafetyBuffer:              profitSafetyBuffer,
 		ImagePrice1K:                    imagePrice1K,
 		ImagePrice2K:                    imagePrice2K,
 		ImagePrice4K:                    imagePrice4K,
 		VideoPrice480P:                  videoPrice480P,
 		VideoPrice720P:                  videoPrice720P,
 		VideoPrice1080P:                 videoPrice1080P,
+		VideoModelPrices:                NormalizeVideoModelPrices(input.VideoModelPrices),
 		WebSearchPricePerCall:           webSearchPricePerCall,
+		SearchPricePer1k:                searchPricePer1k,
+		AudioRealtimePricePerMin:        audioRealtimePricePerMin,
+		AudioTTSPricePerMillionChars:    audioTTSPricePerMillionChars,
+		AudioSTTPricePerHour:            audioSTTPricePerHour,
 		ClaudeCodeOnly:                  input.ClaudeCodeOnly,
 		FallbackGroupID:                 input.FallbackGroupID,
 		FallbackGroupIDOnInvalidRequest: fallbackOnInvalidRequest,
-		SimulateClaudeMaxEnabled:        simulateClaudeMaxEnabled,
 		ModelRouting:                    input.ModelRouting,
 		MCPXMLInject:                    mcpXMLInject,
 		SupportedModelScopes:            input.SupportedModelScopes,
@@ -719,6 +740,21 @@ func (s *adminServiceImpl) UpdateGroup(ctx context.Context, id int64, input *Upd
 	if err := ValidatePeakRateConfig(group.SubscriptionType, group.PeakRateEnabled, group.PeakStart, group.PeakEnd, group.PeakRateMultiplier); err != nil {
 		return nil, err
 	}
+	if input.ProfitControlEnabled != nil {
+		group.ProfitControlEnabled = *input.ProfitControlEnabled
+	}
+	if input.ProfitMinMargin != nil {
+		group.ProfitMinMargin = *input.ProfitMinMargin
+	}
+	if input.ProfitSafetyBuffer != nil {
+		group.ProfitSafetyBuffer = *input.ProfitSafetyBuffer
+	}
+	// 利润控制与高峰同一收口：按合并后的最终平台归一化（转到不支持平台时静默重置），
+	// 再对合并后的最终配置统一校验，防止部分字段更新拼出非法组合入库。
+	group.ProfitControlEnabled, group.ProfitMinMargin, group.ProfitSafetyBuffer = NormalizeProfitControlConfig(group.Platform, group.ProfitControlEnabled, group.ProfitMinMargin, group.ProfitSafetyBuffer)
+	if err := ValidateProfitControlConfig(group.Platform, group.ProfitControlEnabled, group.ProfitMinMargin, group.ProfitSafetyBuffer); err != nil {
+		return nil, err
+	}
 	if input.ImagePrice1K != nil {
 		group.ImagePrice1K = normalizePrice(input.ImagePrice1K)
 	}
@@ -737,23 +773,29 @@ func (s *adminServiceImpl) UpdateGroup(ctx context.Context, id int64, input *Upd
 	if input.VideoPrice1080P != nil {
 		group.VideoPrice1080P = normalizePrice(input.VideoPrice1080P)
 	}
+	// nil = leave unchanged; empty map = clear per-model prices.
+	if input.VideoModelPrices != nil {
+		group.VideoModelPrices = NormalizeVideoModelPrices(input.VideoModelPrices)
+	}
 	if input.WebSearchPricePerCall != nil {
 		group.WebSearchPricePerCall = normalizePrice(input.WebSearchPricePerCall)
+	}
+	if input.SearchPricePer1k != nil {
+		group.SearchPricePer1k = normalizePrice(input.SearchPricePer1k)
+	}
+	if input.AudioRealtimePricePerMin != nil {
+		group.AudioRealtimePricePerMin = normalizePrice(input.AudioRealtimePricePerMin)
+	}
+	if input.AudioTTSPricePerMillionChars != nil {
+		group.AudioTTSPricePerMillionChars = normalizePrice(input.AudioTTSPricePerMillionChars)
+	}
+	if input.AudioSTTPricePerHour != nil {
+		group.AudioSTTPricePerHour = normalizePrice(input.AudioSTTPricePerHour)
 	}
 
 	// Claude Code 客户端限制
 	if input.ClaudeCodeOnly != nil {
 		group.ClaudeCodeOnly = *input.ClaudeCodeOnly
-	}
-	// 模拟 Claude Max 订阅计费（fork 定制，仅 anthropic 平台）
-	if input.SimulateClaudeMaxEnabled != nil {
-		if *input.SimulateClaudeMaxEnabled && group.Platform != PlatformAnthropic {
-			return nil, errors.New("simulate_claude_max_enabled only supported for anthropic groups")
-		}
-		group.SimulateClaudeMaxEnabled = *input.SimulateClaudeMaxEnabled
-	}
-	if group.Platform != PlatformAnthropic {
-		group.SimulateClaudeMaxEnabled = false
 	}
 	if input.FallbackGroupID != nil {
 		// 校验降级分组
@@ -842,6 +884,22 @@ func (s *adminServiceImpl) UpdateGroup(ctx context.Context, id int64, input *Upd
 		group.AllowLive = false
 	}
 	sanitizeGroupReasoningEffortPolicy(group)
+
+	// fork: validate simulate_claude_max_enabled
+	effectivePlatform := group.Platform
+	if input.Platform != "" {
+		effectivePlatform = input.Platform
+	}
+	if input.SimulateClaudeMaxEnabled != nil {
+		if *input.SimulateClaudeMaxEnabled && effectivePlatform != PlatformAnthropic {
+			return nil, errors.New("simulate_claude_max_enabled only supported for anthropic groups")
+		}
+		group.SimulateClaudeMaxEnabled = *input.SimulateClaudeMaxEnabled
+	}
+	// fork: auto-clear if platform changed to non-anthropic
+	if input.Platform != "" && input.Platform != PlatformAnthropic && group.SimulateClaudeMaxEnabled {
+		group.SimulateClaudeMaxEnabled = false
+	}
 
 	if err := s.groupRepo.Update(ctx, group); err != nil {
 		return nil, err
