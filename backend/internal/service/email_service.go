@@ -199,9 +199,12 @@ func (s *EmailService) SendEmailWithConfig(config *SMTPConfig, to, subject, body
 	}
 	defer func() { _ = client.Close() }()
 
-	auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
-	if err = client.Auth(auth); err != nil {
-		return fmt.Errorf("smtp auth: %w", err)
+	// fork: 用户名空时跳过认证（适用于 IP 白名单免认证的 SMTP 中继）
+	if config.Username != "" {
+		auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
+		if err = client.Auth(auth); err != nil {
+			return fmt.Errorf("smtp auth: %w", err)
+		}
 	}
 	if err = client.Mail(message.envelopeFrom); err != nil {
 		return fmt.Errorf("smtp mail: %w", err)
@@ -459,9 +462,12 @@ func (s *EmailService) TestSMTPConnectionWithConfig(config *SMTPConfig) error {
 	}
 	defer func() { _ = client.Close() }()
 
-	auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
-	if err := client.Auth(auth); err != nil {
-		return fmt.Errorf("smtp authentication failed: %w", err)
+	// fork: 用户名空时跳过认证
+	if config.Username != "" {
+		auth := smtp.PlainAuth("", config.Username, config.Password, config.Host)
+		if err := client.Auth(auth); err != nil {
+			return fmt.Errorf("smtp authentication failed: %w", err)
+		}
 	}
 
 	// 认证成功即视为连接可用；与发送路径一致，忽略 QUIT 的非标准响应。
