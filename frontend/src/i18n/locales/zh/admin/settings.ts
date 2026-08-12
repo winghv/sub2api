@@ -617,6 +617,8 @@ export default {
         docUrlHint: '文档网站的链接。留空则隐藏文档链接。',
         docUrlPlaceholder: 'https://docs.example.com',
         siteLogo: '站点Logo',
+        afterSalesQr: '售后群二维码',
+        afterSalesQrHint: 'PNG、JPG 格式，最大 2MB。上传后用户指南页自动展示，无需重新部署。',
         uploadImage: '上传图片',
         remove: '移除',
         logoHint: 'PNG、JPG 或 SVG 格式，最大 300KB。建议：80x80px 正方形图片。',

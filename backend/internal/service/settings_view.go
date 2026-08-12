@@ -151,6 +151,7 @@ type SystemSettings struct {
 
 	SiteName                    string
 	SiteLogo                    string
+	AfterSalesQR                string
 	SiteSubtitle                string
 	APIBaseURL                  string
 	ContactInfo                 string
@@ -339,6 +340,7 @@ type PublicSettings struct {
 	AliyunCaptchaRegion                 string
 	SiteName                            string
 	SiteLogo                            string
+	AfterSalesQR                        string
 	SiteSubtitle                        string
 	APIBaseURL                          string
 	ContactInfo                         string

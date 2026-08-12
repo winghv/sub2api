@@ -625,6 +625,8 @@ export default {
         docUrlPlaceholder: 'https://docs.example.com',
         docUrlHint: 'Link to your documentation site. Leave empty to hide the documentation link.',
         siteLogo: 'Site Logo',
+        afterSalesQr: 'After-Sales Group QR Code',
+        afterSalesQrHint: 'PNG or JPG, max 2MB. Shown on the user guide page immediately, no redeploy needed.',
         uploadImage: 'Upload Image',
         remove: 'Remove',
         logoHint: 'PNG, JPG, or SVG. Max 300KB. Recommended: 80x80px square image.',

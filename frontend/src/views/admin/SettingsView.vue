@@ -6489,6 +6489,23 @@
                 />
               </div>
 
+              <!-- After-Sales QR Upload -->
+              <div>
+                <label
+                  class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  {{ t("admin.settings.site.afterSalesQr") }}
+                </label>
+                <ImageUpload
+                  v-model="form.after_sales_qr"
+                  mode="image"
+                  :upload-label="t('admin.settings.site.uploadImage')"
+                  :remove-label="t('admin.settings.site.remove')"
+                  :hint="t('admin.settings.site.afterSalesQrHint')"
+                  :max-size="2 * 1024 * 1024"
+                />
+              </div>
+
               <!-- Home Content -->
               <div>
                 <label
@@ -9450,6 +9467,7 @@ const form = reactive<SettingsForm>({
   default_user_rpm_limit: 0,
   site_name: DEFAULT_SITE_NAME,
   site_logo: "",
+  after_sales_qr: "",
   site_subtitle: DEFAULT_SITE_SUBTITLE,
   api_base_url: "",
   contact_info: "",
@@ -11075,6 +11093,7 @@ async function saveSettings() {
       default_user_rpm_limit: form.default_user_rpm_limit,
       site_name: form.site_name,
       site_logo: form.site_logo,
+      after_sales_qr: form.after_sales_qr,
       site_subtitle: form.site_subtitle,
       api_base_url: form.api_base_url,
       contact_info: form.contact_info,
