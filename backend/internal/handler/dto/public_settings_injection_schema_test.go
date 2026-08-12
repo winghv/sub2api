@@ -33,6 +33,9 @@ func TestPublicSettingsInjectionPayload_SchemaDoesNotDrift(t *testing.T) {
 		"sora_client_enabled": "upstream-only field, not used on this fork",
 		// force_email_on_third_party_signup lives on the DTO but is not injected via SSR.
 		"force_email_on_third_party_signup": "auth-source default, not a feature flag",
+		// after_sales_qr holds a base64 image read only by the guide page, which
+		// fetches it asynchronously. Injecting it would add the blob to every page.
+		"after_sales_qr": "base64 image, fetched async by the guide page",
 	}
 
 	var missing []string
