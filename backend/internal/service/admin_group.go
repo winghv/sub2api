@@ -311,7 +311,6 @@ func (s *adminServiceImpl) CreateGroup(ctx context.Context, input *CreateGroupIn
 		return nil, errors.New("rate_multiplier must be > 0")
 	}
 
-	platform := NormalizeGroupPlatform(input.Platform)
 	modelPricing, err := normalizeGroupModelPricing(platform, input.ModelPricing)
 	if err != nil {
 		return nil, err
