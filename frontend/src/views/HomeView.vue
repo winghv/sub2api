@@ -44,6 +44,17 @@
             <span>{{ t('home.docs') }}</span>
           </a>
 
+          <a
+            :href="cloudUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cyber-icon-button cyber-icon-button--wide cyber-icon-button--brand"
+            :title="t('nav.superwhvCloud')"
+          >
+            <Icon name="sparkles" size="sm" />
+            <span>SuperWHV</span>
+          </a>
+
           <!-- Model Plaza Link -->
           <router-link
             v-if="showModelPlazaEntry"
@@ -313,6 +324,7 @@ import LocaleSwitcher from '@/components/common/LocaleSwitcher.vue'
 import Icon from '@/components/icons/Icon.vue'
 import { DEFAULT_SITE_LOGO, DEFAULT_SITE_NAME, isDefaultSiteSubtitle } from '@/utils/brand'
 import { sanitizeUrl } from '@/utils/url'
+import { applyThemeClass, persistTheme, resolveInitialTheme } from '@/utils/theme'
 import { FeatureFlags, isFeatureFlagEnabled } from '@/utils/featureFlags'
 
 type IconName = InstanceType<typeof Icon>['$props']['name']
@@ -441,17 +453,13 @@ const workflowSteps = computed(() => [
 
 function toggleTheme() {
   isDark.value = !isDark.value
-  document.documentElement.classList.toggle('dark', isDark.value)
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  applyThemeClass(isDark.value)
+  persistTheme(isDark.value)
 }
 
 function initTheme() {
-  const savedTheme = localStorage.getItem('theme')
-  const shouldUseDark =
-    savedTheme === 'dark' ||
-    (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-  isDark.value = shouldUseDark
-  document.documentElement.classList.toggle('dark', shouldUseDark)
+  isDark.value = resolveInitialTheme()
+  applyThemeClass(isDark.value)
 }
 
 onMounted(() => {
@@ -713,6 +721,22 @@ onMounted(() => {
   border-color: #00e5ff;
   background: rgba(0, 229, 255, 0.12);
   color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* SuperWHV brand chip — violet/magenta accent, overrides the default cyan hover */
+.cyber-icon-button--brand {
+  border-color: rgba(192, 132, 252, 0.55);
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.4), rgba(134, 25, 106, 0.3));
+  color: #f0abfc;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.22);
+}
+
+.cyber-icon-button--brand:hover,
+.cyber-icon-button--brand:focus-visible {
+  border-color: #e879f9;
+  background: linear-gradient(135deg, rgba(126, 34, 206, 0.55), rgba(162, 28, 125, 0.45));
+  color: #fdf4ff;
   transform: translateY(-1px);
 }
 
@@ -1499,6 +1523,20 @@ onMounted(() => {
   border-color: #0891b2;
   background: rgba(8, 145, 178, 0.08);
   color: #0e7490;
+}
+
+.cyber-home--light .cyber-icon-button--brand {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: linear-gradient(135deg, rgba(250, 245, 255, 0.95), rgba(252, 231, 243, 0.92));
+  color: #9333ea;
+  box-shadow: none;
+}
+
+.cyber-home--light .cyber-icon-button--brand:hover,
+.cyber-home--light .cyber-icon-button--brand:focus-visible {
+  border-color: #a855f7;
+  background: linear-gradient(135deg, rgba(243, 232, 255, 0.98), rgba(251, 207, 232, 0.95));
+  color: #7e22ce;
 }
 
 .cyber-home--light .cyber-user-initial {

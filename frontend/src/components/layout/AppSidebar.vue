@@ -196,6 +196,7 @@ import VersionBadge from '@/components/common/VersionBadge.vue'
 import Icon from '@/components/icons/Icon.vue'
 import { sanitizeSvg } from '@/utils/sanitize'
 import { sanitizeUrl } from '@/utils/url'
+import { applyThemeClass, persistTheme, resolveInitialTheme } from '@/utils/theme'
 import { FeatureFlags, makeSidebarFlag } from '@/utils/featureFlags'
 import { useBatchImageAccess } from '@/composables/useBatchImageAccess'
 
@@ -847,8 +848,8 @@ function toggleSidebar() {
 
 function applyTheme(dark: boolean) {
   isDark.value = dark
-  document.documentElement.classList.toggle('dark', dark)
-  localStorage.setItem('theme', dark ? 'dark' : 'light')
+  applyThemeClass(dark)
+  persistTheme(dark)
 }
 
 function toggleTheme() {
@@ -923,11 +924,7 @@ function handleGroupClick(item: NavItem) {
 }
 
 // Initialize theme (must also clear dark when light is selected)
-const savedTheme = localStorage.getItem('theme')
-const shouldUseDark =
-  savedTheme === 'dark' ||
-  (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-applyTheme(shouldUseDark)
+applyTheme(resolveInitialTheme())
 
 // Fetch admin settings (for feature-gated nav items like Ops).
 watch(

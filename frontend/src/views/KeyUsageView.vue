@@ -21,6 +21,16 @@
           >
             <Icon name="book" size="md" />
           </a>
+          <a
+            href="https://cloud.superwhv.me"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="superwhv-chip flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-semibold"
+            :title="t('nav.superwhvCloud')"
+          >
+            <Icon name="sparkles" size="md" />
+            <span class="hidden sm:inline">SuperWHV</span>
+          </a>
           <button
             @click="toggleTheme"
             class="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-dark-400 dark:hover:bg-dark-800 dark:hover:text-white"
@@ -425,6 +435,7 @@ import Icon from '@/components/icons/Icon.vue'
 import { buildGatewayUrl } from '@/api/client'
 import { formatDateLocalInput } from '@/utils/format'
 import { sanitizeUrl } from '@/utils/url'
+import { applyThemeClass, persistTheme, resolveInitialTheme } from '@/utils/theme'
 
 const { t, locale } = useI18n()
 const appStore = useAppStore()
@@ -442,8 +453,8 @@ const isDark = ref(document.documentElement.classList.contains('dark'))
 
 function toggleTheme() {
   isDark.value = !isDark.value
-  document.documentElement.classList.toggle('dark', isDark.value)
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  applyThemeClass(isDark.value)
+  persistTheme(isDark.value)
 }
 
 const currentYear = computed(() => new Date().getFullYear())
@@ -907,11 +918,8 @@ async function queryKey() {
 // ==================== Lifecycle ====================
 
 function initTheme() {
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    isDark.value = true
-    document.documentElement.classList.add('dark')
-  }
+  isDark.value = resolveInitialTheme()
+  applyThemeClass(isDark.value)
 }
 
 function formatResetTime(resetAt: string | null | undefined): string {
@@ -940,6 +948,33 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.superwhv-chip {
+  color: #a855f7;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(236, 72, 153, 0.1));
+  box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.35);
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.superwhv-chip:hover {
+  color: #e879f9;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(236, 72, 153, 0.18));
+  box-shadow: inset 0 0 0 1px rgba(232, 121, 249, 0.6);
+}
+
+.dark .superwhv-chip {
+  color: #f0abfc;
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.35), rgba(134, 25, 106, 0.28));
+  box-shadow: inset 0 0 0 1px rgba(192, 132, 252, 0.4);
+}
+
+.dark .superwhv-chip:hover {
+  color: #fdf4ff;
+  background: linear-gradient(135deg, rgba(126, 34, 206, 0.5), rgba(162, 28, 125, 0.4));
+  box-shadow: inset 0 0 0 1px rgba(240, 171, 252, 0.7);
+}
 /* Input focus ring */
 .input-ring {
   transition: box-shadow 0.2s ease, border-color 0.2s ease;

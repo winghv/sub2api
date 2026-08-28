@@ -85,6 +85,7 @@ import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores'
 import Icon from '@/components/icons/Icon.vue'
 import { sanitizeUrl } from '@/utils/url'
+import { applyThemeClass, persistTheme, resolveInitialTheme } from '@/utils/theme'
 import { DEFAULT_SITE_LOGO, DEFAULT_SITE_NAME, isDefaultSiteSubtitle } from '@/utils/brand'
 
 const appStore = useAppStore()
@@ -119,17 +120,13 @@ const currentYear = computed(() => new Date().getFullYear())
 
 function toggleTheme() {
   isDark.value = !isDark.value
-  document.documentElement.classList.toggle('dark', isDark.value)
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  applyThemeClass(isDark.value)
+  persistTheme(isDark.value)
 }
 
 function initTheme() {
-  const savedTheme = localStorage.getItem('theme')
-  const shouldUseDark =
-    savedTheme === 'dark' ||
-    (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-  isDark.value = shouldUseDark
-  document.documentElement.classList.toggle('dark', shouldUseDark)
+  isDark.value = resolveInitialTheme()
+  applyThemeClass(isDark.value)
 }
 
 onMounted(() => {
