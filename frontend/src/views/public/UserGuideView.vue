@@ -1,27 +1,12 @@
 <template>
   <AppLayout>
-    <div class="min-h-screen min-w-0 bg-gray-50 dark:bg-dark-950">
-      <!-- Header -->
-      <div class="border-b border-gray-200 bg-white dark:border-dark-700 dark:bg-dark-900">
-        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-              {{ t('guide.title') }}
-            </h1>
-            <router-link to="/home" class="btn btn-secondary">
-              <Icon name="home" size="sm" class="mr-2" />
-              {{ t('common.backToHome') }}
-            </router-link>
-          </div>
-        </div>
-      </div>
-
-      <!-- Content -->
-      <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="min-w-0">
+      <!-- Content（页头标题由 AppLayout 顶栏承担，页内不再重复一层标题栏） -->
+      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div class="grid min-w-0 gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
           <!-- Navigation Sidebar -->
           <aside class="hidden lg:block">
-            <nav class="sticky top-8 space-y-1 rounded-lg border border-gray-200 bg-white p-4 dark:border-dark-700 dark:bg-dark-900">
+            <nav class="sticky top-24 space-y-1 rounded-lg border border-gray-200 bg-white p-4 dark:border-dark-700 dark:bg-dark-900">
               <h2 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
                 {{ t('guide.tableOfContents') }}
               </h2>
@@ -35,6 +20,15 @@
               >
                 {{ section.title }}
               </a>
+              <div class="mt-3 border-t border-gray-100 pt-3 dark:border-dark-700">
+                <router-link
+                  to="/home"
+                  class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 dark:text-dark-400 dark:hover:bg-dark-800 dark:hover:text-gray-200"
+                >
+                  <Icon name="home" size="sm" />
+                  {{ t('common.backToHome') }}
+                </router-link>
+              </div>
             </nav>
           </aside>
 
