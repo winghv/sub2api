@@ -70,13 +70,17 @@ describe('DateRangePicker', () => {
     })
 
     await wrapper.find('.date-picker-trigger').trigger('click')
-    const presetButton = wrapper.findAll('.date-picker-preset').find((node) =>
-      node.text().includes('Last 24 Hours')
+
+    // 下拉通过 Teleport 挂到 body，需从 document 上查找
+    const presetButton = Array.from(document.body.querySelectorAll<HTMLButtonElement>('.date-picker-preset')).find(
+      (node) => node.textContent?.includes('Last 24 Hours')
     )
     expect(presetButton).toBeDefined()
 
-    await presetButton!.trigger('click')
-    await wrapper.find('.date-picker-apply').trigger('click')
+    presetButton!.click()
+    await wrapper.vm.$nextTick()
+    document.body.querySelector<HTMLButtonElement>('.date-picker-apply')!.click()
+    await wrapper.vm.$nextTick()
 
     const nowAfterClick = new Date()
     const yesterdayAfterClick = new Date(nowAfterClick.getTime() - 24 * 60 * 60 * 1000)
