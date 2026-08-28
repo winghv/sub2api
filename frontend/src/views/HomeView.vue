@@ -44,6 +44,17 @@
             <span>{{ t('home.docs') }}</span>
           </a>
 
+          <!-- Model Plaza Link -->
+          <router-link
+            v-if="showModelPlazaEntry"
+            to="/model-plaza"
+            class="cyber-icon-button cyber-icon-button--wide"
+            :title="t('nav.modelPlaza')"
+          >
+            <Icon name="grid" size="sm" />
+            <span>{{ t('nav.modelPlaza') }}</span>
+          </router-link>
+
           <div class="cyber-locale-control">
             <LocaleSwitcher />
           </div>
@@ -302,6 +313,7 @@ import LocaleSwitcher from '@/components/common/LocaleSwitcher.vue'
 import Icon from '@/components/icons/Icon.vue'
 import { DEFAULT_SITE_LOGO, DEFAULT_SITE_NAME, isDefaultSiteSubtitle } from '@/utils/brand'
 import { sanitizeUrl } from '@/utils/url'
+import { FeatureFlags, isFeatureFlagEnabled } from '@/utils/featureFlags'
 
 type IconName = InstanceType<typeof Icon>['$props']['name']
 
@@ -323,6 +335,7 @@ const siteSubtitle = computed(() => {
 })
 const docUrl = computed(() => sanitizeUrl(appStore.cachedPublicSettings?.doc_url || appStore.docUrl || ''))
 const homeContent = computed(() => appStore.cachedPublicSettings?.home_content || '')
+const modelPlazaEnabled = computed(() => isFeatureFlagEnabled(FeatureFlags.modelPlaza))
 
 const terminalLines = computed(() => [
   t('home.cyber.terminalLines.chat'),
@@ -342,6 +355,12 @@ const cloudUrl = 'https://cloud.superwhv.me'
 const currentYear = computed(() => new Date().getFullYear())
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
+const modelPlazaRequiresAuth = computed(
+  () => appStore.cachedPublicSettings?.model_plaza_require_auth === true,
+)
+const showModelPlazaEntry = computed(
+  () => modelPlazaEnabled.value && (isAuthenticated.value || !modelPlazaRequiresAuth.value),
+)
 const isAdmin = computed(() => authStore.isAdmin)
 const dashboardPath = computed(() => (isAdmin.value ? '/admin/dashboard' : '/dashboard'))
 const userInitial = computed(() => {
