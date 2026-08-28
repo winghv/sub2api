@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="min-h-screen bg-gray-50 dark:bg-dark-950">
+    <div class="min-h-screen min-w-0 bg-gray-50 dark:bg-dark-950">
       <!-- Header -->
       <div class="border-b border-gray-200 bg-white dark:border-dark-700 dark:bg-dark-900">
         <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
@@ -18,7 +18,7 @@
 
       <!-- Content -->
       <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div class="grid gap-8 lg:grid-cols-[280px_1fr]">
+        <div class="grid min-w-0 gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
           <!-- Navigation Sidebar -->
           <aside class="hidden lg:block">
             <nav class="sticky top-8 space-y-1 rounded-lg border border-gray-200 bg-white p-4 dark:border-dark-700 dark:bg-dark-900">
@@ -39,7 +39,7 @@
           </aside>
 
           <!-- Main Content -->
-          <main class="space-y-8">
+          <main class="min-w-0 space-y-8">
             <!-- Purchase Channels -->
             <section id="purchase" class="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-700 dark:bg-dark-900">
               <h2 class="mb-6 text-xl font-bold text-gray-900 dark:text-white">
