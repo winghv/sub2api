@@ -65,7 +65,7 @@ describe('UsageStatsCards', () => {
     expect(text).toContain('22')
   })
 
-  it('raises the total token card while its cache tooltip is active', () => {
+  it('keeps the cache tooltip out of the layout while hidden and raises the card on hover', () => {
     const wrapper = mount(UsageStatsCards, {
       props: {
         stats,
@@ -77,6 +77,17 @@ describe('UsageStatsCards', () => {
       },
     })
 
+    const tooltip = wrapper.findAll('span').find((el) => el.classes().includes('group-hover:block'))
+
+    expect(tooltip).toBeDefined()
+    // `opacity-0` hides the tooltip visually but keeps it in the layout, so its
+    // fixed width still widens the document and causes horizontal scrolling on
+    // narrow screens. `hidden` (display: none) takes it out of the flow.
+    expect(tooltip?.classes()).toContain('hidden')
+    expect(tooltip?.classes()).not.toContain('opacity-0')
+
+    // The card must raise above siblings while hovered/focused so the tooltip
+    // is not clipped by the filter cards below it.
     const totalTokenCard = wrapper.findAll('.card')[1]
     expect(totalTokenCard.classes()).toContain('hover:z-10')
     expect(totalTokenCard.classes()).toContain('focus-within:z-10')
