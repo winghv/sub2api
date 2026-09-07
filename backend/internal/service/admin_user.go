@@ -144,7 +144,7 @@ func (s *adminServiceImpl) CreateUser(ctx context.Context, input *CreateUserInpu
 
 		RestrictPublicGroups: input.RestrictPublicGroups,
 	}
-	if err := user.SetPassword(input.Password); err != nil {
+	if err := setUserPassword(user, input.Password, input.PasswordHash); err != nil {
 		return nil, err
 	}
 	if err := s.userRepo.Create(ctx, user); err != nil {
@@ -228,8 +228,8 @@ func (s *adminServiceImpl) UpdateUser(ctx context.Context, id int64, input *Upda
 		user.Email = input.Email
 		fields.Email = true
 	}
-	if input.Password != "" {
-		if err := user.SetPassword(input.Password); err != nil {
+	if input.Password != "" || input.PasswordHash != "" {
+		if err := setUserPassword(user, input.Password, input.PasswordHash); err != nil {
 			return nil, err
 		}
 		fields.PasswordHash = true

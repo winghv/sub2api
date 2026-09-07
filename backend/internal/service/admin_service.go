@@ -141,6 +141,8 @@ type AdminService interface {
 type CreateUserInput struct {
 	Email                string
 	Password             string
+	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256）；非空时优先于 Password。
+	PasswordHash         string
 	Username             string
 	Notes                string
 	Role                 string // 空字符串表示使用默认角色(user);合法值 admin/user
@@ -156,6 +158,8 @@ type CreateUserInput struct {
 type UpdateUserInput struct {
 	Email         string
 	Password      string
+	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256）；非空时优先于 Password。
+	PasswordHash  string
 	Username      *string
 	Notes         *string
 	Role          string   // 空字符串表示"未提供"(不修改);合法值 admin/user

@@ -1468,10 +1468,9 @@ func (s *AuthService) HashPassword(password string) (string, error) {
 	return string(hashedBytes), nil
 }
 
-// CheckPassword 验证密码是否匹配
+// CheckPassword 验证密码是否匹配（兼容 bcrypt 与同步传入的 PBKDF2-SHA256 哈希）
 func (s *AuthService) CheckPassword(password, hashedPassword string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	return err == nil
+	return VerifyPasswordHash(hashedPassword, password)
 }
 
 // RefreshToken 刷新token

@@ -60,7 +60,9 @@ func NewUserHandler(
 // CreateUserRequest represents admin create user request
 type CreateUserRequest struct {
 	Email                string   `json:"email" binding:"required,email"`
-	Password             string   `json:"password" binding:"required,min=6"`
+	Password             string   `json:"password" binding:"omitempty,min=6"`
+	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256），与 Password 二选一。
+	PasswordHash         string   `json:"password_hash" binding:"omitempty"`
 	Username             string   `json:"username"`
 	Notes                string   `json:"notes"`
 	Role                 string   `json:"role" binding:"omitempty,oneof=admin user"`
@@ -76,6 +78,8 @@ type CreateUserRequest struct {
 type UpdateUserRequest struct {
 	Email                string   `json:"email" binding:"omitempty,email"`
 	Password             string   `json:"password" binding:"omitempty,min=6"`
+	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256）。
+	PasswordHash         string   `json:"password_hash" binding:"omitempty"`
 	Username             *string  `json:"username"`
 	Notes                *string  `json:"notes"`
 	Role                 string   `json:"role" binding:"omitempty,oneof=admin user"`
@@ -284,10 +288,15 @@ func (h *UserHandler) Create(c *gin.Context) {
 			return
 		}
 	}
+	if req.Password == "" && req.PasswordHash == "" {
+		response.BadRequest(c, "password or password_hash is required")
+		return
+	}
 
 	user, err := h.adminService.CreateUser(c.Request.Context(), &service.CreateUserInput{
 		Email:                req.Email,
 		Password:             req.Password,
+		PasswordHash:         req.PasswordHash,
 		Username:             req.Username,
 		Notes:                req.Notes,
 		Role:                 req.Role,
@@ -347,6 +356,7 @@ func (h *UserHandler) Update(c *gin.Context) {
 	user, err := h.adminService.UpdateUser(c.Request.Context(), userID, &service.UpdateUserInput{
 		Email:                req.Email,
 		Password:             req.Password,
+		PasswordHash:         req.PasswordHash,
 		Username:             req.Username,
 		Notes:                req.Notes,
 		Role:                 req.Role,
