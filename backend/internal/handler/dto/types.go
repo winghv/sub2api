@@ -45,6 +45,9 @@ type AdminUser struct {
 
 	Notes      string     `json:"notes"`
 	LastUsedAt *time.Time `json:"last_used_at"`
+	// PasswordHash 预哈希密码（bcrypt 或 PBKDF2-SHA256）。仅出现在 admin API 中，
+	// 供跨系统用户同步传播哈希；明文密码在任何接口都不存在。
+	PasswordHash string `json:"password_hash,omitempty"`
 	// GroupRates 用户专属分组倍率配置
 	// map[groupID]rateMultiplier
 	GroupRates map[int64]float64 `json:"group_rates,omitempty"`
