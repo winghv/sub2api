@@ -160,8 +160,8 @@ func ValidateSimpleModeGroupOperation(cfg *config.Config, operation AdminGroupOp
 
 // CreateUserInput represents input for creating a new user via admin operations.
 type CreateUserInput struct {
-	Email                string
-	Password             string
+	Email    string
+	Password string
 	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256）；非空时优先于 Password。
 	PasswordHash         string
 	Username             string
@@ -177,8 +177,8 @@ type CreateUserInput struct {
 }
 
 type UpdateUserInput struct {
-	Email         string
-	Password      string
+	Email    string
+	Password string
 	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256）；非空时优先于 Password。
 	PasswordHash  string
 	Username      *string

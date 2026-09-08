@@ -59,8 +59,8 @@ func NewUserHandler(
 
 // CreateUserRequest represents admin create user request
 type CreateUserRequest struct {
-	Email                string   `json:"email" binding:"required,email"`
-	Password             string   `json:"password" binding:"omitempty,min=6"`
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"omitempty,min=6"`
 	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256），与 Password 二选一。
 	PasswordHash         string   `json:"password_hash" binding:"omitempty"`
 	Username             string   `json:"username"`
@@ -76,8 +76,8 @@ type CreateUserRequest struct {
 // UpdateUserRequest represents admin update user request
 // 使用指针类型来区分"未提供"和"设置为0"
 type UpdateUserRequest struct {
-	Email                string   `json:"email" binding:"omitempty,email"`
-	Password             string   `json:"password" binding:"omitempty,min=6"`
+	Email    string `json:"email" binding:"omitempty,email"`
+	Password string `json:"password" binding:"omitempty,min=6"`
 	// PasswordHash 同步场景直存预哈希密码（bcrypt 或 PBKDF2-SHA256）。
 	PasswordHash         string   `json:"password_hash" binding:"omitempty"`
 	Username             *string  `json:"username"`
