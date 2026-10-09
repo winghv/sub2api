@@ -17,7 +17,9 @@ import yaml
 FULL_CONFIG = Path('.goreleaser.yaml')
 SIMPLE_CONFIG = Path('.goreleaser.simple.yaml')
 VERSION_FILE = Path('backend/cmd/server/VERSION')
-VERSION_RE = re.compile(r'\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?')
+# fork: 允许第四段数字后缀。本 fork 的发布号在官方版本号后追加 .N 区分定制版
+# （见 CLAUDE.md 版本管理策略），upstream 原版只接受三段 semver。
+VERSION_RE = re.compile(r'\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z.-]+)?')
 
 
 def config(simple=False):
